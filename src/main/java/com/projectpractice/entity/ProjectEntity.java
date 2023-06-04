@@ -1,6 +1,5 @@
 package com.projectpractice.entity;
 
-import com.alibaba.excel.annotation.ExcelProperty;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -16,32 +15,24 @@ import java.time.LocalDateTime;
  * @BelongsProject: projectPractice
  * @BelongsPackage: com.projectpractice.entity
  * @Author: Tianyu Han
- * @CreateTime: 2023-06-03  17:18
- * @Description: User实体
+ * @CreateTime: 2023-06-04  20:41
+ * @Description: project实体
  * @Version: 1.0
  */
-@TableName("user_info")
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class UserEntity {
+@TableName("project_info")
+public class ProjectEntity {
     @TableId
     private String id;
-    @ExcelProperty("用户名")
-    private String username;
-    private String password;
-    @ExcelProperty("开始时间")
-    private LocalDateTime startTime;
-    @ExcelProperty("结束时间")
-    private LocalDateTime stopTime;
-    @TableField(fill = FieldFill.INSERT)
-    private String status;
-    @ExcelProperty("创建人")
+    private String userId;
+    private String projectName;
+    private String projectContent;
     @TableField(fill = FieldFill.INSERT)
     private String createdBy;
     @TableField(fill = FieldFill.INSERT)
-    @ExcelProperty("创建时间")
     private LocalDateTime creationDate;
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private String lastUpdatedBy;
