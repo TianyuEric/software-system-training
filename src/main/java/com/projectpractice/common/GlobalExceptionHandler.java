@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public HttpResponseEntity exceptionHandle(Exception exception){
-        exception.printStackTrace();
         return HttpResponseEntity.error(exception.getMessage());
     }
 }

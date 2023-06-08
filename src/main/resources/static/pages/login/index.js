@@ -13,7 +13,7 @@ const onLogin = () => {
     contentType: "application/json",
     success(res) {
       if (res.code === '666') {
-        $util.setItem('userInfo', res.data)
+        $util.setItem('userInfo', res.data[0])
         location.href = "/pages/questionnaire/index.html"
       } else {
         alert(res.message)

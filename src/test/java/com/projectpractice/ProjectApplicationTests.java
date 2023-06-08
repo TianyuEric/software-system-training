@@ -1,8 +1,7 @@
 package com.projectpractice;
 
 import com.alibaba.fastjson.JSON;
-import com.projectpractice.common.HttpResponseEntity;
-import com.projectpractice.common.UserMessage;
+import com.projectpractice.entity.ProjectEntity;
 import com.projectpractice.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,13 +20,21 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.HashMap;
+import java.time.LocalDateTime;
 
+/**
+ * @BelongsProject: projectPractice
+ * @BelongsPackage: com.projectpractice
+ * @Author: Tianyu Han
+ * @CreateTime: 2023-06-05  19:27
+ * @Description: projectTest
+ * @Version: 1.0
+ */
 @AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ProjectPracticeApplication.class)
 @Slf4j
-class ProjectPracticeApplicationTests {
+class ProjectApplicationTests {
     @Autowired
     private MockMvc mockMvc;
 
@@ -39,19 +46,20 @@ class ProjectPracticeApplicationTests {
         // 设定mockMvc能mock的controller是整个springBoot项目环境中的controller
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext). build();
     }
+
     @Test
-    void testUserLogin() {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setUsername("admin");
-        userEntity.setPassword("123456");
-        String body = JSON.toJSONString(userEntity);
-        UserEntity userEntity2 = new UserEntity();
-        userEntity2.setUsername("admin");
-        userEntity2.setPassword("123");
-        String body2 = JSON.toJSONString(userEntity2);
+    void testQueryProject(){
+        ProjectEntity projectEntity = new ProjectEntity();
+        projectEntity.setProjectName("hhh");
+        projectEntity.setId("1");
+        ProjectEntity projectEntity2 = new ProjectEntity();
+        projectEntity2.setProjectName(null);
+        projectEntity2.setId(null);
+        String body = JSON.toJSONString(projectEntity);
+        String body2 = JSON.toJSONString(projectEntity2);
         MvcResult mvcResult;
         try {
-            mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/admin/userLogin")
+            mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/queryProjectList")
                             .accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
                             .content(body).characterEncoding("utf-8")).andExpect(MockMvcResultMatchers.status().isOk())
                     .andDo(MockMvcResultHandlers.print())
@@ -62,7 +70,7 @@ class ProjectPracticeApplicationTests {
             e.printStackTrace();
         }
         try {
-            mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/admin/userLogin")
+            mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/queryProjectList")
                             .accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
                             .content(body2).characterEncoding("utf-8")).andExpect(MockMvcResultMatchers.status().isOk())
                     .andDo(MockMvcResultHandlers.print())
@@ -75,111 +83,83 @@ class ProjectPracticeApplicationTests {
     }
 
     @Test
-    void testAddUser(){
+    void testAddProject(){
+        ProjectEntity projectEntity = new ProjectEntity();
+        projectEntity.setProjectName("hhhhh");
+        projectEntity.setProjectContent("eeeee");
+        String body = JSON.toJSONString(projectEntity);
+        MvcResult mvcResult;
+        try {
+            mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/addProjectInfo")
+                            .accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
+                            .content(body).characterEncoding("utf-8")).andExpect(MockMvcResultMatchers.status().isOk())
+                    .andDo(MockMvcResultHandlers.print())
+                    // 正式执行接口,并返回接口的返回值
+                    .andReturn();
+            log.info(mvcResult.getResponse().getContentAsString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void testModifyProject(){
+        ProjectEntity projectEntity = new ProjectEntity();
+        projectEntity.setId("1");
+        projectEntity.setProjectName("hhhhh");
+        projectEntity.setProjectContent("55555");
+        String body = JSON.toJSONString(projectEntity);
+        MvcResult mvcResult;
+        try {
+            mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/modifyProjectInfo")
+                            .accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
+                            .content(body).characterEncoding("utf-8")).andExpect(MockMvcResultMatchers.status().isOk())
+                    .andDo(MockMvcResultHandlers.print())
+                    // 正式执行接口,并返回接口的返回值
+                    .andReturn();
+            log.info(mvcResult.getResponse().getContentAsString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void testProjectDelete(){
+        ProjectEntity projectEntity = new ProjectEntity();
+        projectEntity.setId("1");
+        String body = JSON.toJSONString(projectEntity);
+        MvcResult mvcResult;
+        try {
+            mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/deleteProjectById")
+                            .accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
+                            .content(body).characterEncoding("utf-8")).andExpect(MockMvcResultMatchers.status().isOk())
+                    .andDo(MockMvcResultHandlers.print())
+                    // 正式执行接口,并返回接口的返回值
+                    .andReturn();
+            log.info(mvcResult.getResponse().getContentAsString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void testEntity(){
+        String str = UserEntity.builder().id("").createdBy("")
+                .creationDate(LocalDateTime.now()).startTime(LocalDateTime.now()).password("")
+                .lastUpdatedBy("").status("").lastUpdateDate(LocalDateTime.now()).username("")
+                .stopTime(LocalDateTime.now()).build().toString();
+        String aaa = UserEntity.builder().toString();
         UserEntity userEntity = new UserEntity();
-        userEntity.setUsername("hhhh");
-        userEntity.setPassword("6666");
-        String body = JSON.toJSONString(userEntity);
-        MvcResult mvcResult;
-        try {
-            mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/admin/addUserInfo")
-                            .accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
-                            .content(body).characterEncoding("utf-8")).andExpect(MockMvcResultMatchers.status().isOk())
-                    .andDo(MockMvcResultHandlers.print())
-                    // 正式执行接口,并返回接口的返回值
-                    .andReturn();
-            log.info(mvcResult.getResponse().getContentAsString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    void testModifyUser(){
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId("1");
-        userEntity.setUsername("hhhh");
-        userEntity.setPassword("6666");
-        String body = JSON.toJSONString(userEntity);
-        MvcResult mvcResult;
-        try {
-            mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/admin/modifyUserInfo")
-                            .accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
-                            .content(body).characterEncoding("utf-8")).andExpect(MockMvcResultMatchers.status().isOk())
-                    .andDo(MockMvcResultHandlers.print())
-                    // 正式执行接口,并返回接口的返回值
-                    .andReturn();
-            log.info(mvcResult.getResponse().getContentAsString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    void testDeleteUser(){
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId("1");
-        userEntity.setUsername("hhhh");
-        userEntity.setPassword("6666");
-        String body = JSON.toJSONString(userEntity);
-        MvcResult mvcResult;
-        try {
-            mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/admin/deleteUserinfo")
-                            .accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
-                            .content(body).characterEncoding("utf-8")).andExpect(MockMvcResultMatchers.status().isOk())
-                    .andDo(MockMvcResultHandlers.print())
-                    // 正式执行接口,并返回接口的返回值
-                    .andReturn();
-            log.info(mvcResult.getResponse().getContentAsString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    void testQueryUser(){
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("pageSize", 10);
-        map.put("username", "");
-        map.put("pageNum", 1);
-        String body = JSON.toJSONString(map);
-        MvcResult mvcResult;
-        try {
-            mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/admin/queryUserList")
-                            .accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
-                            .content(body).characterEncoding("utf-8")).andExpect(MockMvcResultMatchers.status().isOk())
-                    .andDo(MockMvcResultHandlers.print())
-                    // 正式执行接口,并返回接口的返回值
-                    .andReturn();
-            log.info(mvcResult.getResponse().getContentAsString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    void testExportExcel(){
-        MvcResult mvcResult;
-        try {
-            mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/admin/exportExcel")
-                            .accept(MediaType.APPLICATION_JSON))
-                    .andExpect(MockMvcResultMatchers.status().isOk())
-                    .andDo(MockMvcResultHandlers.print())
-                    // 正式执行接口,并返回接口的返回值
-                    .andReturn();
-            log.info(mvcResult.getResponse().getContentAsString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    void testOthers(){
-        HttpResponseEntity httpResponseEntity = new HttpResponseEntity();
-        HttpResponseEntity hhh = HttpResponseEntity.success("hhh");
-        log.info(httpResponseEntity + hhh.toString());
-        UserMessage userMessage = new UserMessage();
-        UserMessage.setUsername("hhh");
+        UserEntity userEntity1 = new UserEntity();
+        boolean equals = userEntity.equals(userEntity1);
+        log.info(str + aaa + userEntity.hashCode());
+        String str2 = ProjectEntity.builder().id("").creationDate(LocalDateTime.now()).createdBy("").projectName("").projectContent("")
+                .userId("").lastUpdateDate(LocalDateTime.now()).lastUpdatedBy("").build().toString();
+        String bbb = ProjectEntity.builder().toString();
+        ProjectEntity projectEntity = new ProjectEntity();
+        ProjectEntity projectEntity1 = new ProjectEntity();
+        boolean equals1 = projectEntity.equals(projectEntity1);
+        log.info(str2 + bbb + projectEntity.hashCode());
     }
 
 

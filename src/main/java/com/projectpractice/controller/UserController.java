@@ -43,15 +43,18 @@ public class UserController {
      */
     @PostMapping("/userLogin")
     public HttpResponseEntity userLogin(@RequestBody UserEntity userEntity, HttpServletResponse response){
-        List<UserEntity> list = userService.query().eq("username", userEntity.getUsername())
+        List<UserEntity> list = userService.query()
+                .eq("username", userEntity.getUsername())
                 .eq("password", userEntity.getPassword())
                 .eq("status", "1").list();
         if (list.isEmpty()){
-            return HttpResponseEntity.error("登录失败");
+            return HttpResponseEntity.response(false,"登录", null);
         } else {
             Cookie cookie = new Cookie("username", list.get(0).getUsername());
+            cookie.setSecure(true);
+            cookie.setHttpOnly(true);
             response.addCookie(cookie);
-            return HttpResponseEntity.success("登录成功", list);
+            return HttpResponseEntity.response(true, "登录", list);
         }
     }
 
@@ -62,7 +65,8 @@ public class UserController {
      */
     @PostMapping("/addUserInfo")
     public HttpResponseEntity addUserinfo(@RequestBody UserEntity userEntity){
-        return userService.save(userEntity)? HttpResponseEntity.success("创建成功"): HttpResponseEntity.error("创建失败");
+        boolean bool = userService.save(userEntity);
+        return HttpResponseEntity.response(bool, "创建", null);
     }
 
     /**
@@ -72,7 +76,8 @@ public class UserController {
      */
     @PostMapping("/modifyUserInfo")
     public HttpResponseEntity modifyUserinfo(@RequestBody UserEntity userEntity){
-        return userService.updateById(userEntity)? HttpResponseEntity.success("修改成功"): HttpResponseEntity.error("修改失败");
+        boolean bool = userService.updateById(userEntity);
+        return HttpResponseEntity.response(bool, "修改", null);
     }
 
     /**
@@ -82,7 +87,8 @@ public class UserController {
      */
     @PostMapping("/deleteUserinfo")
     public HttpResponseEntity deleteUserById(@RequestBody UserEntity userEntity){
-        return userService.removeById(userEntity)? HttpResponseEntity.success("删除成功"): HttpResponseEntity.error("删除失败");
+        boolean bool = userService.removeById(userEntity);
+        return HttpResponseEntity.response(bool, "删除", null);
     }
 
     /**
@@ -95,7 +101,8 @@ public class UserController {
         Page<UserEntity> page = new Page<>((Integer) map.get("pageNum"), (Integer) map.get("pageSize"));
         userService.query().eq("status", "1").page(page);
         List<UserEntity> list = page.getRecords();
-        return HttpResponseEntity.success("查询成功", list);
+        boolean bool = list.isEmpty();
+        return HttpResponseEntity.response(!bool,"查询", list);
     }
 
     /**
