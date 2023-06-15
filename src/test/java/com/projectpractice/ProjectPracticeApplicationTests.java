@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,6 +23,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.HashMap;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
@@ -37,7 +40,7 @@ class ProjectPracticeApplicationTests {
     @BeforeEach
     public void setUp(){
         // 设定mockMvc能mock的controller是整个springBoot项目环境中的controller
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext). build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
     @Test
     void testUserLogin() {
@@ -57,6 +60,7 @@ class ProjectPracticeApplicationTests {
                     .andDo(MockMvcResultHandlers.print())
                     // 正式执行接口,并返回接口的返回值
                     .andReturn();
+            assertThat(mvcResult.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
             log.info(mvcResult.getResponse().getContentAsString());
         } catch (Exception e) {
             e.printStackTrace();
@@ -68,6 +72,7 @@ class ProjectPracticeApplicationTests {
                     .andDo(MockMvcResultHandlers.print())
                     // 正式执行接口,并返回接口的返回值
                     .andReturn();
+            assertThat(mvcResult.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
             log.info(mvcResult.getResponse().getContentAsString());
         } catch (Exception e) {
             e.printStackTrace();
@@ -88,6 +93,7 @@ class ProjectPracticeApplicationTests {
                     .andDo(MockMvcResultHandlers.print())
                     // 正式执行接口,并返回接口的返回值
                     .andReturn();
+            assertThat(mvcResult.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
             log.info(mvcResult.getResponse().getContentAsString());
         } catch (Exception e) {
             e.printStackTrace();
@@ -109,6 +115,7 @@ class ProjectPracticeApplicationTests {
                     .andDo(MockMvcResultHandlers.print())
                     // 正式执行接口,并返回接口的返回值
                     .andReturn();
+            assertThat(mvcResult.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
             log.info(mvcResult.getResponse().getContentAsString());
         } catch (Exception e) {
             e.printStackTrace();
@@ -130,6 +137,7 @@ class ProjectPracticeApplicationTests {
                     .andDo(MockMvcResultHandlers.print())
                     // 正式执行接口,并返回接口的返回值
                     .andReturn();
+            assertThat(mvcResult.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
             log.info(mvcResult.getResponse().getContentAsString());
         } catch (Exception e) {
             e.printStackTrace();
@@ -149,8 +157,41 @@ class ProjectPracticeApplicationTests {
                             .accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
                             .content(body).characterEncoding("utf-8")).andExpect(MockMvcResultMatchers.status().isOk())
                     .andDo(MockMvcResultHandlers.print())
-                    // 正式执行接口,并返回接口的返回值
                     .andReturn();
+            assertThat(mvcResult.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
+            log.info(mvcResult.getResponse().getContentAsString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        map.replace("username", "wwwwww");
+        try {
+            mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/admin/queryUserList")
+                            .accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
+                            .content(body).characterEncoding("utf-8")).andExpect(MockMvcResultMatchers.status().isOk())
+                    .andDo(MockMvcResultHandlers.print())
+                    .andReturn();
+            assertThat(mvcResult.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
+            log.info(mvcResult.getResponse().getContentAsString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void testQueryUserReturnNull(){
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("pageSize", 10);
+        map.put("pageNum", 1);
+        map.put("username", "wwwwww");
+        String body = JSON.toJSONString(map);
+        MvcResult mvcResult;
+        try {
+            mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/admin/queryUserList")
+                            .accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
+                            .content(body).characterEncoding("utf-8")).andExpect(MockMvcResultMatchers.status().isOk())
+                    .andDo(MockMvcResultHandlers.print())
+                    .andReturn();
+            assertThat(mvcResult.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
             log.info(mvcResult.getResponse().getContentAsString());
         } catch (Exception e) {
             e.printStackTrace();
@@ -167,6 +208,7 @@ class ProjectPracticeApplicationTests {
                     .andDo(MockMvcResultHandlers.print())
                     // 正式执行接口,并返回接口的返回值
                     .andReturn();
+            assertThat(mvcResult.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
             log.info(mvcResult.getResponse().getContentAsString());
         } catch (Exception e) {
             e.printStackTrace();

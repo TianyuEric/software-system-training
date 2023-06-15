@@ -37,8 +37,8 @@ public class ProjectController {
         List<ProjectEntity> list = projectService.query()
                 .like("id", projectEntity.getId() == null?"": projectEntity.getId())
                 .like("project_name", projectEntity.getProjectName()== null?"": projectEntity.getProjectName()).list();
-        boolean bool = list.isEmpty();
-        return HttpResponseEntity.response(!bool, "查询", list);
+        boolean bool = !list.isEmpty();
+        return HttpResponseEntity.response(bool, "查询", list);
     }
 
     /**

@@ -99,10 +99,11 @@ public class UserController {
     @PostMapping("/queryUserList")
     public HttpResponseEntity queryUserList(@RequestBody Map<String, Object> map){
         Page<UserEntity> page = new Page<>((Integer) map.get("pageNum"), (Integer) map.get("pageSize"));
-        userService.query().eq("status", "1").page(page);
+        userService.query().eq("status", "1")
+                .like("username", map.get("username")).page(page);
         List<UserEntity> list = page.getRecords();
-        boolean bool = list.isEmpty();
-        return HttpResponseEntity.response(!bool,"查询", list);
+        boolean bool = !list.isEmpty();
+        return HttpResponseEntity.response(bool,"查询", list);
     }
 
     /**
