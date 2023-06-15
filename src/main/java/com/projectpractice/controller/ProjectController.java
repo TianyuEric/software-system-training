@@ -37,7 +37,8 @@ public class ProjectController {
         List<ProjectEntity> list = projectService.query()
                 .like("id", projectEntity.getId() == null?"": projectEntity.getId())
                 .like("project_name", projectEntity.getProjectName()== null?"": projectEntity.getProjectName()).list();
-        return list.isEmpty()? HttpResponseEntity.error("查询失败"): HttpResponseEntity.success("查询成功", list);
+        boolean bool = !list.isEmpty();
+        return HttpResponseEntity.response(bool, "查询", list);
     }
 
     /**
@@ -47,7 +48,8 @@ public class ProjectController {
      */
     @PostMapping("/addProjectInfo")
     public HttpResponseEntity addProjectInfo(@RequestBody ProjectEntity projectEntity){
-        return projectService.save(projectEntity)? HttpResponseEntity.success("添加成功"): HttpResponseEntity.error("添加失败");
+        boolean bool = projectService.save(projectEntity);
+        return HttpResponseEntity.response(bool, "添加", null);
     }
 
     /**
@@ -57,7 +59,8 @@ public class ProjectController {
      */
     @PostMapping("/modifyProjectInfo")
     public HttpResponseEntity modifyProjectInfo(@RequestBody ProjectEntity projectEntity){
-        return projectService.updateById(projectEntity)? HttpResponseEntity.success("修改成功"): HttpResponseEntity.error("修改失败");
+        boolean bool = projectService.updateById(projectEntity);
+        return HttpResponseEntity.response(bool, "修改", null);
     }
 
     /**
@@ -67,6 +70,7 @@ public class ProjectController {
      */
     @PostMapping("/deleteProjectById")
     public HttpResponseEntity deleteProject(@RequestBody ProjectEntity projectEntity){
-        return projectService.removeById(projectEntity)? HttpResponseEntity.success("删除成功"): HttpResponseEntity.error("删除失败");
+        boolean bool = projectService.removeById(projectEntity);
+        return  HttpResponseEntity.response(bool, "删除", null);
     }
 }

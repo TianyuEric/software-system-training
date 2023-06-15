@@ -6,6 +6,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.Optional;
 
 /**
  * @BelongsProject: projectPractice
@@ -20,11 +22,8 @@ public class UserInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler){
         Cookie[] cookies = request.getCookies();
-        for (Cookie cookie :cookies) {
-            if (cookie.getName().equals("username")){
-                UserMessage.setUsername(cookie.getValue());
-            }
-        }
+        Arrays.stream(Optional.ofNullable(cookies).orElse(new Cookie[0])).filter(e -> e.getName().equals("username"))
+                .findFirst().ifPresent(e-> UserMessage.setUsername(e.getValue()));
         return true;
     }
 

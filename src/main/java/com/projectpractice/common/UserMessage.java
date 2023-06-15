@@ -11,8 +11,6 @@ package com.projectpractice.common;
 public class UserMessage {
     private static final ThreadLocal<String> local = new ThreadLocal<>();
 
-    private UserMessage() {
-    }
 
     public static String getUsername() {
             return local.get();
