@@ -1,11 +1,41 @@
 onload = () => {
   $('#headerUsername').text($util.getItem('userInfo').username)
   $('#headerDivB').text('创建问卷')
+  getProjects()
+}
+const handleTypeChange = (val) =>{
+  localStorage.setItem("type", val)
+}
+
+const handleProjectChange = (val) =>{
+  localStorage.setItem("projectId", val)
 }
 
 const onCreateTemplate = () => {
   location.href = "/pages/createNewQuestionnaire/index.html"
 }
+
+const getProjects = ()=> {
+  let params = {
+    projectName: ''
+  }
+  $.ajax({
+    url: API_BASE_URL + '/queryProjectList',
+    type: 'POST',
+    data: JSON.stringify(params),
+    dataType: 'json',
+    contentType: 'application/json',
+    success(res) {
+      answerInfoList = res.data
+      res.data.map((item, index) => {
+        $('#selectProject').append(`
+         <option value="${item.id}">${item.projectName}</option>
+        `)
+      })
+    }
+  })
+}
+
 
 const importHistoryQuestionnaire = () => {
   $('#divider').css('display', 'flex')

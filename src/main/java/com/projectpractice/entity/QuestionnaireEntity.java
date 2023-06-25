@@ -1,10 +1,7 @@
 package com.projectpractice.entity;
 
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -43,5 +40,7 @@ public class QuestionnaireEntity {
     private String projectId;
     private LocalDateTime startTime;
     private LocalDateTime stopTime;
+    @TableLogic(value = "0", delval = "1")
+    private String isDelete;
 
 }

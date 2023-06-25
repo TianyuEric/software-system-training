@@ -1,35 +1,282 @@
-let questionnaireTitle = '问卷标题'
-let questionnaireDescription = '问卷说明'
+let questionnaireTitle = $util.getPageParam("questionnaireName")
+let questionnaireDescription = $util.getPageParam("questionnaireDescription")
 const problem = []
+let questionBank = []
+let addedQuestionId
+let questionnaireId = localStorage.getItem("questionnaireId")
+const handleEditFinish = () =>{
+  location.href = '/pages/questionnaire/index.html'
+}
+onload = () =>{
+  getBankQuestions()
+}
+const getBankQuestions = async ()=>{
+  let res = await fetch(API_BASE_URL + '/question/bank' ,
+      {method: 'POST',
+        headers: {"Content-Type": "application/json"}}).then(res =>{
+    return res.json()
+  })
+  questionBank = res.data
+}
 
+
+// 当按钮被点击时触发弹出框
+$('#importBtn').click(function() {
+  // 清空表格内容
+  $('#questionTable tbody').empty();
+
+  questionBank.forEach((value, index) => {
+    let optionContent = ''
+    value.option.forEach((value1, index1) => {
+      optionContent +=  '<br/>' + `${index1 + 1}. ` +  value1.chooseTerm
+    })
+    let question = '题目' + (index + 1)
+        + value.name  + optionContent ;
+    let checkbox = '<input type="checkbox" class="question-checkbox">';
+
+    let row = $('<tr>').data("value", value).append($('<td>').html(question)).append($('<td>').html(checkbox))
+    $('#questionTable tbody').append(row);
+
+  })
+  // 动态生成表格行
+  // for (let i = 0; i < 5; i++) {
+  //   let question = '题目' + (i + 1);
+  //
+  // }
+
+  // 显示弹出框
+  $('#importModal').modal('show');
+});
+
+// 当确定按钮被点击时触发导入操作
+$('#confirmBtn').click(async function() {
+  // 获取选中的题目
+  var selectedQuestions = [];
+  $('.question-checkbox:checked').each(function() {
+    // let question = $(this).closest('tr').find('td:first').data('value');
+    let question = $(this).closest('tr').data('value');
+    selectedQuestions.push(question);
+
+  });
+  await handleQuestionBankAdd(selectedQuestions)
+  // 在此处执行题库导入操作，使用selectedQuestions数组中的题目数据
+  // 关闭弹出框
+  $('#importModal').modal('hide');
+});
+const handleQuestionBankAdd = async (questions) =>{
+  for (const value of questions) {
+    const index = questions.indexOf(value);
+    await handleAddQuestion(value.type)
+    let question = {id: addedQuestionId,
+      mustAnswer: true, problemName: value.name, option: value.option}
+    problem.push(question)
+    console.log(value)
+    if (value.type === '1'){
+      handleBankSingleAdd(value.name, value.option, index)
+    } else {
+      handleBankMultiAdd(value.name, value.option, index)
+    }
+  }
+}
+const handleBankSingleAdd = (name, options, index)=>{
+  let optStr = ''
+  options.forEach((value, index1) =>{
+    optStr += `<div class="option-item" id="optionItem${index1}">
+        <input type="text" class="form-control" id="chooseTerm" placeholder="选项【单选】" oninput="onInput(${index}, ${index1}, 'chooseTerm')" />
+        <span class="option-del" onclick="singleChoiceDelOption(${index}, ${index1})">删除</span>
+        </div>`
+  })
+  let ele = `
+    <div class="question" id="question${index}" data-type="1" data-problemIndex="${index}">
+      <div class="top">
+        <span class="question-title" id="questionTitle">1.请编辑问题？</span>
+        <span class="must-answer" id="mustAnswer" onclick="onMustAnswerClick(${index})">必答题</span>
+      </div>
+      <div class="bottom">
+        <textarea class="form-control textarea" id="problemName" placeholder="单选题目" rows="4" oninput="onInput(${index}, ${undefined}, 'problemName')"></textarea>
+        <div class="option" id="option">
+        ${optStr}
+        </div>
+        <div>
+          <button type="button" class="btn btn-link btn-add-option" onclick="singleChoiceAddOption(${index})">添加选项</button>
+        </div>
+        <div class="btn-group">
+          <button type="button" id="cancelEdit" class="btn btn-default" onclick="cancelEdit(${index})">取消编辑</button>
+          <button type="button" id="editFinish" class="btn btn-default" onclick="singleChoiceEditFinish(${index})">完成编辑</button>
+        </div>
+      </div>
+      <div class="bottom2" style="display: none;">
+        
+      </div>
+    </div>
+  `
+  $('#problem').append(ele)
+  $(`#question${index} #problemName `).val(name)
+  for (let i = 0; i < options.length; i++) {
+    $(`#question${index} #optionItem${i} #chooseTerm`).val(problem[index].option[i].chooseTerm)
+  }
+  $(".question").hover(() => {
+    let problemIndex = $('.question:hover').attr('data-problemIndex')
+    let ele = `
+      <div class="operation">
+      <div class="button" onclick="handleMoveUp(${problemIndex})">上移</div>
+      <div class="button" onclick="handleMoveDown(${problemIndex})">下移</div>
+        <div class="button" onclick="handleEdit(${problemIndex})">编辑</div>
+        <div class="button" onclick="handleDelete(${problemIndex})">删除</div>
+      </div>
+    `
+    $('.question:hover').append(ele)
+    $(".question:hover").css('border', '1px solid #fdb553')
+  }, () => {
+    $('.question > .operation').remove()
+    $(".question").css('border', '1px solid #ffffff')
+  })
+}
+const handleBankMultiAdd = (name, options, index)=>{
+  let optStr = ''
+  options.forEach((value, index1) =>{
+    optStr += `<div class="option-item" id="optionItem${index1}">
+            <input type="text" class="form-control" id="chooseTerm" placeholder="选项【多选】" oninput="onInput(${index}, ${index1}, 'chooseTerm')" />
+            <span class="option-del" onclick="multipleChoiceDelOption(${index}, ${index1})">删除</span>
+          </div>`
+  })
+  let ele = `
+   <div class="question" id="question${index}" data-type="2" data-problemIndex="${index}">
+      <div class="top">
+        <span class="question-title" id="questionTitle">1.请编辑问题？</span>
+        <span class="must-answer" id="mustAnswer" onclick="onMustAnswerClick(${index})">必答题</span>
+      </div>
+      <div class="bottom">
+        <textarea class="form-control textarea" id="problemName" placeholder="多选题目" rows="4" oninput="onInput(${index}, ${undefined}, 'problemName')"></textarea>
+        <div class="option" id="option">
+          ${optStr}
+        </div>
+        <div>
+          <button type="button" class="btn btn-link btn-add-option" onClick="multipleChoiceAddOption(${index})">添加选项</button>
+        </div>
+        <div class="btn-group">
+          <button type="button" id="cancelEdit" class="btn btn-default" onclick="cancelEdit(${index})">取消编辑</button>
+          <button type="button" id="editFinish" class="btn btn-default" onClick="multipleChoiceEditFinish(${index})">完成编辑</button>
+        </div>
+      </div>
+      <div class="bottom2" style="display: none;">
+        
+      </div>
+    </div>
+  `
+  $('#problem').append(ele)
+  $(`#question${index} #problemName `).val(name)
+  for (let i = 0; i < options.length; i++) {
+    $(`#question${index} #optionItem${i} #chooseTerm`).val(problem[index].option[i].chooseTerm)
+  }
+  $(".question").hover(() => {
+    let problemIndex = $('.question:hover').attr('data-problemIndex')
+    let ele = `
+      <div class="operation">
+      <div class="button" onclick="handleMoveUp(${problemIndex})">上移</div>
+      <div class="button" onclick="handleMoveDown(${problemIndex})">下移</div>
+        <div class="button" onclick="handleEdit(${problemIndex})">编辑</div>
+        <div class="button" onclick="handleDelete(${problemIndex})">删除</div>
+      </div>
+    `
+    $('.question:hover').append(ele)
+    $(".question:hover").css('border', '1px solid #fdb553')
+  }, () => {
+    $('.question > .operation').remove()
+    $(".question").css('border', '1px solid #ffffff')
+  })
+}
 /**
  * 添加问题
  * 
  * @param {*} type 1：单选，2：多选，3：填空，4：矩阵，5：量表
  */
-const onAddQuestion = (type) => {
+const handleAddQuestion = async (type) => {
+    let params = {
+      type: type,
+      questionnaireId: questionnaireId
+    }
+    await $.ajax({
+      url: API_BASE_URL + '/question/add',
+      type: 'POST',
+      data: JSON.stringify(params),
+      dataType: 'json',
+      contentType: 'application/json',
+      success(res) {
+        if (res.code === '666'){
+          addedQuestionId = res.data
+        }
+
+      }})
+}
+const handleEditQuestion = (problemIndex) =>{
+  console.log(problem)
+  let params = {
+    id: problem[problemIndex].id,
+    name: problem[problemIndex].problemName,
+    option: problem[problemIndex].option,
+    isMust: problem[problemIndex].mustAnswer.toString()
+  }
+  $.ajax({
+    url: API_BASE_URL + '/question/update',
+    type: 'POST',
+    data: JSON.stringify(params),
+    dataType: 'json',
+    contentType: 'application/json',
+    success(res) {
+      if (res.code === '666'){
+        alert('成功')
+      }
+    }})
+}
+
+const handleDeleteQuestion = (problemIndex) =>{
+  console.log(problem)
+  let params = {
+    id: problem[problemIndex].id
+  }
+  $.ajax({
+    url: API_BASE_URL + '/question/delete',
+    type: 'POST',
+    data: JSON.stringify(params),
+    dataType: 'json',
+    contentType: 'application/json',
+    success(res) {
+        if (res.code === '666'){
+          alert('删除成功')
+        } else {
+          alert(res.message)
+        }
+    }})
+}
+const onAddQuestion = async (type) => {
   let ele
   switch (type) {
     case 1:
       ele = handleAddSingleChoice()
+        await handleAddQuestion(type)
       break;
     case 2:
       ele = handleAddMultipleChoice()
+      await handleAddQuestion(type)
       break;
     case 3:
       ele = handleAddFillBlanks()
+      await handleAddQuestion(type)
       break;
     case 4:
       ele = handleAddMatrix()
+      await handleAddQuestion(type)
       break;
     case 5:
       ele = handleAddGauge()
+      await handleAddQuestion(type)
       break;
     default:
       break;
   }
   $('#problem').append(ele)
-  problem.push({ problemName: '', mustAnswer: true, option: [{}] })
+  problem.push({ problemName: '', mustAnswer: true, option: [{chooseTerm: ''}], id: addedQuestionId })
 
   $(".question").hover(() => {
     let problemIndex = $('.question:hover').attr('data-problemIndex')
@@ -48,12 +295,28 @@ const onAddQuestion = (type) => {
     $(".question").css('border', '1px solid #ffffff')
   })
 }
-
+//
 const onInput = (problemIndex, optionIndex, key) => {
-  if (optionIndex || optionIndex === 0)
+  if (optionIndex || optionIndex === 0){
     problem[problemIndex].option[optionIndex][key] = $(`#question${problemIndex} #optionItem${optionIndex} #${key}`)[0].value
+  }
   else
     problem[problemIndex][key] = $(`#question${problemIndex} #${key}`)[0].value
+}
+
+const addOptionApi = async (problemIndex) =>{
+  let params = {
+    questionId: problem[problemIndex].id,
+    options: problem[problemIndex].option
+  }
+  let res = await fetch(API_BASE_URL + '/option/add' ,
+      {method: 'POST', body: JSON.stringify(params),
+        headers: {"Content-Type": "application/json"}}).then(res =>{
+    return res.json()
+  })
+  if (res.code === '666'){
+    alert('成功')
+  }
 }
 
 const onMustAnswerClick = (problemIndex) => {
@@ -156,8 +419,10 @@ const handleEdit = (problemIndex) => {
 }
 
 const handleDelete = (problemIndex) => {
+  handleDeleteQuestion(problemIndex)
   $(`#question${problemIndex}`).remove()
   problem.splice(problemIndex, 1)
+
 }
 
 const handleAddSingleChoice = () => {
@@ -198,7 +463,7 @@ const singleChoiceAddOption = (problemIndex) => {
       <span class="option-del" onclick="singleChoiceDelOption(${problemIndex}, ${problem[problemIndex].option.length})">删除</span>
     </div>
   `)
-  problem[problemIndex].option.push({})
+  problem[problemIndex].option.push({chooseTerm: ''})
 }
 
 const singleChoiceDelOption = (problemIndex, optionIndex) => {
@@ -210,6 +475,7 @@ const singleChoiceDelOption = (problemIndex, optionIndex) => {
 }
 
 const singleChoiceEditFinish = (problemIndex) => {
+  handleEditQuestion(problemIndex)
   $(`#question${problemIndex} .bottom`).css('display', 'none')
   $(`#question${problemIndex} .bottom2`).css('display', 'inline')
   $(`#question${problemIndex} #questionTitle`).text(`${problemIndex + 1}.${problem[problemIndex].problemName}`)
@@ -263,7 +529,7 @@ const multipleChoiceAddOption = (problemIndex) => {
       <span class="option-del" onclick="multipleChoiceDelOption(${problemIndex}, ${problem[problemIndex].option.length})">删除</span>
     </div>
   `)
-  problem[problemIndex].option.push({})
+  problem[problemIndex].option.push({chooseTerm: ''})
 }
 
 const multipleChoiceDelOption = (problemIndex, optionIndex) => {
@@ -275,6 +541,7 @@ const multipleChoiceDelOption = (problemIndex, optionIndex) => {
 }
 
 const multipleChoiceEditFinish = (problemIndex) => {
+  handleEditQuestion(problemIndex)
   $(`#question${problemIndex} .bottom`).css('display', 'none')
   $(`#question${problemIndex} .bottom2`).css('display', 'inline')
   $(`#question${problemIndex} #questionTitle`).text(`${problemIndex + 1}.${problem[problemIndex].problemName}`)
@@ -313,6 +580,7 @@ const handleAddFillBlanks = () => {
 }
 
 const fillBlanksEditFinish = (problemIndex) => {
+  handleEditQuestion(problemIndex)
   $(`#question${problemIndex} .bottom`).css('display', 'none')
   $(`#question${problemIndex} .bottom2`).css('display', 'inline')
   $(`#question${problemIndex} #questionTitle`).text(`${problemIndex + 1}.${problem[problemIndex].problemName}`)
@@ -320,7 +588,15 @@ const fillBlanksEditFinish = (problemIndex) => {
     <div style="border: 1px solid #CCCCCC; width: 50%; height: 70px;"></div>
   `)
 }
-
+const matrixAddOption = (problemIndex) => {
+  $(`#question${problemIndex} #option`).append(`
+    <div class="option-item" id="optionItem${problem[problemIndex].option.length}">
+      <input type="text" class="form-control" id="chooseTerm" placeholder="选项" oninput="onInput(${problemIndex}, ${problem[problemIndex].option.length}, 'chooseTerm')" />
+      <span class="option-del" onclick="matrixDelOption(${problemIndex}, ${problem[problemIndex].option.length})">删除</span>
+    </div>
+  `)
+  problem[problemIndex].option.push({})
+}
 const handleAddMatrix = () => {
   let ele = `
     <div class="question" id="question${problem.length}" data-type="4" data-problemIndex="${problem.length}">
@@ -352,15 +628,7 @@ const handleAddMatrix = () => {
   return ele
 }
 
-const matrixAddOption = (problemIndex) => {
-  $(`#question${problemIndex} #option`).append(`
-    <div class="option-item" id="optionItem${problem[problemIndex].option.length}">
-      <input type="text" class="form-control" id="chooseTerm" placeholder="选项" oninput="onInput(${problemIndex}, ${problem[problemIndex].option.length}, 'chooseTerm')" />
-      <span class="option-del" onclick="matrixDelOption(${problemIndex}, ${problem[problemIndex].option.length})">删除</span>
-    </div>
-  `)
-  problem[problemIndex].option.push({})
-}
+
 
 const matrixDelOption = (problemIndex, optionIndex) => {
   $(`#question${problemIndex} .option-item`)[optionIndex].remove()
@@ -371,6 +639,7 @@ const matrixDelOption = (problemIndex, optionIndex) => {
 }
 
 const matrixEditFinish = (problemIndex) => {
+  handleEditQuestion(problemIndex)
   $(`#question${problemIndex} .bottom`).css('display', 'none')
   $(`#question${problemIndex} .bottom2`).css('display', 'inline')
   $(`#question${problemIndex} #questionTitle`).text(`${problemIndex + 1}.${problem[problemIndex].problemName}`)
@@ -465,6 +734,7 @@ const gaugeDelOption = (problemIndex, optionIndex) => {
 }
 
 const gaugeEditFinish = (problemIndex) => {
+  handleEditQuestion(problemIndex)
   $(`#question${problemIndex} .bottom`).css('display', 'none')
   $(`#question${problemIndex} .bottom2`).css('display', 'flex')
   $(`#question${problemIndex} #questionTitle`).text(`${problemIndex + 1}.${problem[problemIndex].problemName}`)
@@ -492,17 +762,3 @@ const handleModifyTitle = () => {
   $('#questionnaireDescription').val(questionnaireDescription)
 }
 
-
-const handleEditFinish = () => {
-  let params = {}
-  $.ajax({
-    url: API_BASE_URL + '/modifyQuestionnaire',
-    type: "POST",
-    data: JSON.stringify(params),
-    dataType: "json",
-    contentType: "application/jsoresn",
-    success(res) {
-      console.log(res)
-    }
-  })
-}
