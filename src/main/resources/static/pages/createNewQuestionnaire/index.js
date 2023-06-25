@@ -42,8 +42,8 @@ const handleCreateQuestionnaire = () => {
     success(res) {
       if (res.code === "666") {
         localStorage.setItem("questionnaireId", res.data)
-        $util.setPageParam("questionnaireName", $('#surveyName').val())
-        $util.setPageParam("questionnaireDescription", $('#surveyDescription').val())
+        localStorage.setItem("questionnaireName", $('#surveyName').val())
+        localStorage.setItem("questionnaireDescription", $('#surveyDescription').val())
         location.href = '/pages/designQuestionnaire/index.html'
       } else {
         alert("创建失败")

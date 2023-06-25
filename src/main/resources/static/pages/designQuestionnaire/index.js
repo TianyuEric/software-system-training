@@ -1,5 +1,7 @@
-let questionnaireTitle = $util.getPageParam("questionnaireName")
-let questionnaireDescription = $util.getPageParam("questionnaireDescription")
+let questionnaireTitle = localStorage.getItem("questionnaireName")
+let questionnaireDescription = localStorage.getItem("questionnaireDescription")
+$('#questionnaire-title-span').text('问卷标题：' +questionnaireTitle)
+$('#questionnaire-description-span').text('问卷说明：' + questionnaireDescription)
 const problem = []
 let questionBank = []
 let addedQuestionId
