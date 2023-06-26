@@ -7,14 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
-/**
- * @BelongsProject: reggie_take_out
- * @BelongsPackage: com.common
- * @Author: Tianyu Han
- * @CreateTime: 2022-07-26  15:43
- * @Description: 元数据对象处理器
- * @Version: 1.0
- */
+//元数据对象处理器
 @Component
 @Slf4j
 public class MyMetaObjectHandler implements MetaObjectHandler {

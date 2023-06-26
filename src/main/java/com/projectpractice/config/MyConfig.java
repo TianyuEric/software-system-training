@@ -10,14 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
-/**
- * @BelongsProject: projectPractice
- * @BelongsPackage: com.projectpractice.config
- * @Author: Tianyu Han
- * @CreateTime: 2023-06-03  19:40
- * @Description: webMvc配置
- * @Version: 1.0
- */
+//webMvc配置
 @Configuration
 public class MyConfig implements WebMvcConfigurer {
     @Override

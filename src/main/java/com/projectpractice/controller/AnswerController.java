@@ -19,14 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * @BelongsProject: projectPractice
- * @BelongsPackage: com.projectpractice.controller
- * @Author: Tianyu Han
- * @CreateTime: 2023-06-23  14:33
- * @Description: AnswerController
- * @Version: 1.0
- */
+
 @RestController
 @RequestMapping("/answer")
 @Slf4j

@@ -9,14 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * @BelongsProject: projectPractice
- * @BelongsPackage: com.projectpractice.service.impl
- * @Author: Tianyu Han
- * @CreateTime: 2023-06-12  21:10
- * @Description: AnswerServiceImpl
- * @Version: 1.0
- */
+
 @Service
 public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, AnswerEntity> implements AnswerService {
     @Override

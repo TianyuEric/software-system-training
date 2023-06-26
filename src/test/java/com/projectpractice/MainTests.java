@@ -7,14 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
 
-/**
- * @BelongsProject: projectPractice
- * @BelongsPackage: com.projectpractice
- * @Author: Tianyu Han
- * @CreateTime: 2023-06-08  19:15
- * @Description: 测试
- * @Version: 1.0
- */
+
 @SpringBootTest
 @Slf4j
 class MainTests {

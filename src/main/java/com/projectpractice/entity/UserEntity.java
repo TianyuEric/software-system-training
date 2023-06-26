@@ -12,14 +12,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-/**
- * @BelongsProject: projectPractice
- * @BelongsPackage: com.projectpractice.entity
- * @Author: Tianyu Han
- * @CreateTime: 2023-06-03  17:18
- * @Description: User实体
- * @Version: 1.0
- */
 @TableName("user_info")
 @Data
 @NoArgsConstructor

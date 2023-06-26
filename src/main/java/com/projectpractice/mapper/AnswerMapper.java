@@ -8,14 +8,7 @@ import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
-/**
- * @BelongsProject: projectPractice
- * @BelongsPackage: com.projectpractice.mapper
- * @Author: Tianyu Han
- * @CreateTime: 2023-06-12  21:03
- * @Description: AnswerMapper
- * @Version: 1.0
- */
+
 @Mapper
 public interface AnswerMapper extends BaseMapper<AnswerEntity> {
     @Select("select answer_info.id, questionnaire_info.name questionnaire_name,questionnaire_info.id questionnaire_id, username, answer_time from answer_info, user_info, questionnaire_info" +

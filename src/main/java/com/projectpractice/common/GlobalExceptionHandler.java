@@ -4,12 +4,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
- * @BelongsProject: projectPractice
- * @BelongsPackage: com.projectpractice.common
- * @Author: Tianyu Han
- * @CreateTime: 2023-06-03  20:01
- * @Description: 全局异常处理
- * @Version: 1.0
+ * 全局异常处理
  */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -18,3 +13,5 @@ public class GlobalExceptionHandler {
         return HttpResponseEntity.error(exception.getMessage());
     }
 }
+
+

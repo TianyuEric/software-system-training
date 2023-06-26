@@ -7,14 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-/**
- * @BelongsProject: projectPractice
- * @BelongsPackage: com.projectpractice.dto
- * @Author: Tianyu Han
- * @CreateTime: 2023-06-23  14:40
- * @Description: AnswerInfoDto
- * @Version: 1.0
- */
+
 @Data
 @Builder
 @AllArgsConstructor

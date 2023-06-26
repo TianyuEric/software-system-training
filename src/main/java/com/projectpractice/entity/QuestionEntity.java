@@ -7,14 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * @BelongsProject: projectPractice
- * @BelongsPackage: com.projectpractice.entity
- * @Author: Tianyu Han
- * @CreateTime: 2023-06-12  20:45
- * @Description: 问题实体
- * @Version: 1.0
- */
+
 @Data
 @Builder
 @NoArgsConstructor

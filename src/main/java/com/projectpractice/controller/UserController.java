@@ -17,14 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * @BelongsProject: projectPractice
- * @BelongsPackage: com.projectpractice.controller
- * @Author: Tianyu Han
- * @CreateTime: 2023-06-03  19:01
- * @Description: UserController
- * @Version: 1.0
- */
+
 @RestController
 @RequestMapping("/admin")
 public class UserController {

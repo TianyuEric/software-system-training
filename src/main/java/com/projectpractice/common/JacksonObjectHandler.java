@@ -12,14 +12,7 @@ import java.time.format.DateTimeFormatter;
 
 import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
 
-/**
- * @BelongsProject: projectPractice
- * @BelongsPackage: com.projectpractice.common
- * @Author: Tianyu Han
- * @CreateTime: 2023-06-03  20:17
- * @Description: 序列化配置
- * @Version: 1.0
- */
+//序列化配置
 public class JacksonObjectHandler extends ObjectMapper {
     public static final String DEFAULT_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 

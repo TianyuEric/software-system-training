@@ -10,14 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/**
- * @BelongsProject: projectPractice
- * @BelongsPackage: com.projectpractice.controller
- * @Author: Tianyu Han
- * @CreateTime: 2023-06-04  20:51
- * @Description: ProjectController
- * @Version: 1.0
- */
+
 @RestController
 public class ProjectController {
 

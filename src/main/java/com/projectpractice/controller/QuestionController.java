@@ -19,14 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * @BelongsProject: projectPractice
- * @BelongsPackage: com.projectpractice.controller
- * @Author: Tianyu Han
- * @CreateTime: 2023-06-21  21:29
- * @Description: QuestionController
- * @Version: 1.0
- */
+
 @RestController
 @RequestMapping("/question")
 @Slf4j

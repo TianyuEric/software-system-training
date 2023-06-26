@@ -19,14 +19,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * @BelongsProject: projectPractice
- * @BelongsPackage: com.projectpractice.controller
- * @Author: Tianyu Han
- * @CreateTime: 2023-06-12  21:11
- * @Description: QuestionnaireController
- * @Version: 1.0
- */
+
 @RestController
 @RequestMapping("/questionnaire")
 public class QuestionnaireController {

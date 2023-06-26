@@ -8,14 +8,6 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @BelongsProject: projectPractice
- * @BelongsPackage: com.projectpractice.dto
- * @Author: Tianyu Han
- * @CreateTime: 2023-06-23  17:12
- * @Description: ChosenAnswerDto
- * @Version: 1.0
- */
 @Data
 @Builder
 @NoArgsConstructor
