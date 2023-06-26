@@ -24,7 +24,6 @@ const fetchUserList = () => {
       $('#table #tbody').html('')
       userList = res.data
       userList.map((item, index) => {
-
         $('#table #tbody').append(`
           <tr>
             <td>${index + 1}</td>

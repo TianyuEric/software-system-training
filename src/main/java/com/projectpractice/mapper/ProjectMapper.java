@@ -7,4 +7,5 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface ProjectMapper extends BaseMapper<ProjectEntity> {
+    boolean removeByName(ProjectEntity projectEntity);
 }

@@ -12,10 +12,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("chosen_answer")
-public class ChosenAnswerEntity {
+@TableName("question_bank")
+public class QuestionBank {
     @TableId
     private String id;
-    private String linkId;
-    private String optionId;
+
+    private String name;
+
+    private String type;
 }

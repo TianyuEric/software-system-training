@@ -1,6 +1,5 @@
 package com.projectpractice.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
@@ -20,6 +19,6 @@ public class OptionEntity {
     private String chooseTerm;
     private String questionId;
     private Integer score;
-    private Integer personCount;
+    private Integer personNumCount;
     private String linkQuestionId;
 }

@@ -18,18 +18,22 @@ import java.time.LocalDateTime;
 @Builder
 @TableName("project_info")
 public class ProjectEntity {
+
     @TableId
     private String id;
     private String userId;
     private String projectName;
     private String projectContent;
+
     @TableField(fill = FieldFill.INSERT)
     private String createdBy;
+
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime creationDate;
+
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private String lastUpdatedBy;
+
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime lastUpdateDate;
-
 }

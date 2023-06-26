@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AnswerInfoDto {
+public class AnswerDto {
     private String id;
     private String questionnaireName;
     private String questionnaireId;

@@ -8,5 +8,11 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, ProjectEntity> implements ProjectService {
+public class ProjectServiceDefault
+        extends ServiceImpl<ProjectMapper, ProjectEntity>
+        implements ProjectService {
+    @Override
+    public boolean removeByName(ProjectEntity projectEntity) {
+        return baseMapper.removeByName(projectEntity);
+    }
 }

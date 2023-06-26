@@ -5,4 +5,5 @@ import com.projectpractice.entity.ProjectEntity;
 
 
 public interface ProjectService extends IService<ProjectEntity> {
+    boolean removeByName(ProjectEntity projectEntity);
 }

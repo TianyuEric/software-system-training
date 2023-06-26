@@ -8,5 +8,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class OptionServiceImpl extends ServiceImpl<OptionMapper, OptionEntity> implements OptionService {
+public class OptionServiceDefault
+        extends ServiceImpl<OptionMapper, OptionEntity>
+        implements OptionService {
 }

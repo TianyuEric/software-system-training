@@ -7,18 +7,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-@TableName("answer_info")
-public class AnswerEntity {
+@NoArgsConstructor
+@TableName("chosen_answer")
+public class ChosenAnswer {
     @TableId
     private String id;
-    private String questionnaireId;
-    private String roleId;
-    private LocalDateTime answerTime;
+    private String linkId;
+    private String optionId;
 }

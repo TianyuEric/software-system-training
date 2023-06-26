@@ -7,12 +7,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName("answer_link")
-public class AnswerLinkEntity {
+public class AnswerLink {
     @TableId
     private String id;
     private String questionId;

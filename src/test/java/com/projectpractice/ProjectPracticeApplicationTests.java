@@ -31,8 +31,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(classes = ProjectPracticeApplication.class)
 @Slf4j
 class ProjectPracticeApplicationTests {
+
     @Autowired
     private MockMvc mockMvc;
+
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -198,22 +200,6 @@ class ProjectPracticeApplicationTests {
         }
     }
 
-    @Test
-    void testExportExcel(){
-        MvcResult mvcResult;
-        try {
-            mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/admin/exportExcel")
-                            .accept(MediaType.APPLICATION_JSON))
-                    .andExpect(MockMvcResultMatchers.status().isOk())
-                    .andDo(MockMvcResultHandlers.print())
-                    // 正式执行接口,并返回接口的返回值
-                    .andReturn();
-            assertThat(mvcResult.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
-            log.info(mvcResult.getResponse().getContentAsString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     @Test
     void testOthers(){

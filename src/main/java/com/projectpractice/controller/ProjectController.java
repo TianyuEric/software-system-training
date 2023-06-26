@@ -3,6 +3,7 @@ package com.projectpractice.controller;
 import com.projectpractice.common.HttpResponseEntity;
 import com.projectpractice.entity.ProjectEntity;
 import com.projectpractice.service.ProjectService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,58 +13,44 @@ import java.util.List;
 
 
 @RestController
+@RequiredArgsConstructor // lombok will generate a constructor that autowires all final fields
+
 public class ProjectController {
 
-    private ProjectService projectService;
-    @Autowired
-    public void setProjectService(ProjectService projectService) {
-        this.projectService = projectService;
-    }
+    private final ProjectService projectService;
 
-    /**
-     * 查询项目
-     * @param projectEntity 项目实体
-     * @return HttpResponseEntity
-     */
+//查询项目
     @PostMapping("/queryProjectList")
     public HttpResponseEntity queryProjectList(@RequestBody ProjectEntity projectEntity){
         List<ProjectEntity> list = projectService.query()
                 .like("id", projectEntity.getId() == null?"": projectEntity.getId())
                 .like("project_name", projectEntity.getProjectName()== null?"": projectEntity.getProjectName()).list();
-        boolean bool = !list.isEmpty();
-        return HttpResponseEntity.response(bool, "查询", list);
+        return HttpResponseEntity.response( !list.isEmpty(), "projectService", list);
     }
 
-    /**
-     * 添加项目
-     * @param projectEntity 项目实体
-     * @return HttpResponseEntity
-     */
+//添加项目
     @PostMapping("/addProjectInfo")
     public HttpResponseEntity addProjectInfo(@RequestBody ProjectEntity projectEntity){
-        boolean bool = projectService.save(projectEntity);
-        return HttpResponseEntity.response(bool, "添加", null);
+        return HttpResponseEntity.response(projectService.save(projectEntity), "addProjectInfo", null);
     }
 
-    /**
-     * 修改项目
-     * @param projectEntity 项目实体
-     * @return HttpResponseEntity
-     */
+//修改项目
     @PostMapping("/modifyProjectInfo")
     public HttpResponseEntity modifyProjectInfo(@RequestBody ProjectEntity projectEntity){
-        boolean bool = projectService.updateById(projectEntity);
-        return HttpResponseEntity.response(bool, "修改", null);
+
+        return HttpResponseEntity.response( projectService.updateById(projectEntity), "modifyProjectInfo", null);
     }
 
-    /**
-     *  删除项目
-     * @param projectEntity 项目实体
-     * @return HttpResponseEntity
-     */
+// 删除项目
     @PostMapping("/deleteProjectById")
     public HttpResponseEntity deleteProject(@RequestBody ProjectEntity projectEntity){
-        boolean bool = projectService.removeById(projectEntity);
-        return  HttpResponseEntity.response(bool, "删除", null);
+
+        return  HttpResponseEntity.response(projectService.removeById(projectEntity), "deleteProject", null);
     }
+    // 删除项目
+    @PostMapping("/deleteProjectByName")
+    public HttpResponseEntity deleteProjectByName(@RequestBody ProjectEntity projectEntity){
+        return  HttpResponseEntity.response(projectService.removeByName(projectEntity), "deleteProject", null);
+    }
+
 }

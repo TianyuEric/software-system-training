@@ -8,5 +8,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class QuestionnaireServiceImpl extends ServiceImpl<QuestionnaireMapper, QuestionnaireEntity> implements QuestionnaireService {
+public class QuestionnaireServiceDefault
+        extends ServiceImpl<QuestionnaireMapper, QuestionnaireEntity>
+        implements QuestionnaireService {
 }

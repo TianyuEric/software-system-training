@@ -1,5 +1,5 @@
 package com.projectpractice.entity;
-
+import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
@@ -8,14 +8,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
+
+
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-@TableName("question_bank")
-public class QuestionBankEntity {
+@AllArgsConstructor
+@TableName("answer_info")
+public class AnswerInfo {
     @TableId
     private String id;
-    private String name;
-    private String type;
+    private String questionnaireId;
+    private String roleId;
+    private LocalDateTime answerTime;
 }
