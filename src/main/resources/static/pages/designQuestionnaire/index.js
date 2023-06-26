@@ -211,8 +211,74 @@ const handleAddQuestion = async (type) => {
 
       }})
 }
+const handleAddLinkQuestion = async (problemIndex, optionIndex) => {
+  let ele = `
+    <div class="question" id="question${problem.length}" data-type="1" data-problemIndex="${problem.length}">
+      <div class="top">
+        <span class="question-title" id="questionTitle">1.请编辑问题？</span>
+        <span class="must-answer"  >关联题</span>
+      </div>
+      <div class="bottom">
+        <textarea class="form-control textarea" id="problemName" placeholder="单选题目" rows="4" oninput="onInput(${problem.length}, ${undefined}, 'problemName')"></textarea>
+        <div class="option" id="option">
+          <div class="option-item" id="optionItem0">
+            <input type="text" class="form-control" id="chooseTerm" placeholder="选项【单选】" oninput="onInput(${problem.length}, 0, 'chooseTerm')" />
+            <span class="option-del" onclick="singleChoiceDelOption(${problem.length}, 0)">删除</span>
+          </div>
+        </div>
+        <div>
+          <button type="button" class="btn btn-link btn-add-option" onclick="singleChoiceAddOption(${problem.length})">添加选项</button>
+        </div>
+        <div class="btn-group">
+          <button type="button" id="cancelEdit" class="btn btn-default" onclick="cancelEdit(${problem.length})">取消编辑</button>
+          <button type="button" id="editFinish" class="btn btn-default" onclick="singleChoiceEditFinish(${problem.length})">完成编辑</button>
+        </div>
+      </div>
+      <div class="bottom2" style="display: none;">
+       
+      </div>
+    </div>
+  `
+  let params = {
+    type: '1',
+    questionnaireId: questionnaireId,
+    isLink: '1'
+  }
+  await $.ajax({
+    url: API_BASE_URL + '/question/add',
+    type: 'POST',
+    data: JSON.stringify(params),
+    dataType: 'json',
+    contentType: 'application/json',
+    success(res) {
+      if (res.code === '666'){
+        addedQuestionId = res.data
+        $('#problem').append(ele)
+        problem.push({ problemName: '', mustAnswer: true, option: [{chooseTerm: ''}], id: addedQuestionId })
+        console.log(problemIndex)
+
+        $(".question").hover(() => {
+          let problemIndex = $('.question:hover').attr('data-problemIndex')
+          let ele = `
+      <div class="operation">
+      <div class="button" onclick="handleMoveUp(${problemIndex})">上移</div>
+      <div class="button" onclick="handleMoveDown(${problemIndex})">下移</div>
+        <div class="button" onclick="handleEdit(${problemIndex})">编辑</div>
+        <div class="button" onclick="handleDelete(${problemIndex})">删除</div>
+      </div>
+    `
+          $('.question:hover').append(ele)
+          $(".question:hover").css('border', '1px solid #fdb553')
+        }, () => {
+          $('.question > .operation').remove()
+          $(".question").css('border', '1px solid #ffffff')
+        })
+      }
+      problem[problemIndex].option[optionIndex].linkQuestionId = addedQuestionId
+    }})
+
+}
 const handleEditQuestion = (problemIndex) =>{
-  console.log(problem)
   let params = {
     id: problem[problemIndex].id,
     name: problem[problemIndex].problemName,
@@ -233,7 +299,6 @@ const handleEditQuestion = (problemIndex) =>{
 }
 
 const handleDeleteQuestion = (problemIndex) =>{
-  console.log(problem)
   let params = {
     id: problem[problemIndex].id
   }
@@ -439,7 +504,8 @@ const handleAddSingleChoice = () => {
         <div class="option" id="option">
           <div class="option-item" id="optionItem0">
             <input type="text" class="form-control" id="chooseTerm" placeholder="选项【单选】" oninput="onInput(${problem.length}, 0, 'chooseTerm')" />
-            <span class="option-del" onclick="singleChoiceDelOption(${problem.length}, 0)">删除</span>
+            <span class="option-del" onclick="singleChoiceDelOption(${problem.length}, 0)">删除</span> &nbsp;&nbsp;
+            <span class="option-del" onclick="handleAddLinkQuestion(${problem.length}, 0)">添加关联题目</span>
           </div>
         </div>
         <div>
@@ -451,7 +517,7 @@ const handleAddSingleChoice = () => {
         </div>
       </div>
       <div class="bottom2" style="display: none;">
-        
+       
       </div>
     </div>
   `
@@ -463,6 +529,7 @@ const singleChoiceAddOption = (problemIndex) => {
     <div class="option-item" id="optionItem${problem[problemIndex].option.length}">
       <input type="text" class="form-control" id="chooseTerm" placeholder="选项【单选】" oninput="onInput(${problemIndex}, ${problem[problemIndex].option.length}, 'chooseTerm')" />
       <span class="option-del" onclick="singleChoiceDelOption(${problemIndex}, ${problem[problemIndex].option.length})">删除</span>
+      <span class="option-del" onclick="handleAddLinkQuestion(${problemIndex}, ${problem[problemIndex].option.length})">添加关联题目</span>
     </div>
   `)
   problem[problemIndex].option.push({chooseTerm: ''})

@@ -39,6 +39,8 @@ const handleClickLink = async (id) =>{
   })
   if (res.code === '666'){
     localStorage.setItem("questionnaireId", id)
+    localStorage.setItem("questionnaireName", res.data.name)
+    localStorage.setItem("questionnaireDescription", res.data.comment)
     location.href = '/pages/answerSheet/index.html'
   } else {
     alert('问卷未发布')

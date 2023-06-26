@@ -4,7 +4,8 @@ new Vue({
         return{
             questionnaireName: localStorage.getItem("questionnaireName"),
             questionData: [],
-            tableData: []
+            tableData: [],
+            dialogVisible: false
         }
     },
     async mounted(){
@@ -29,6 +30,9 @@ new Vue({
                 return e.json()
             })
             this.questionData = res.data
+        },
+        async getQuestionCount(){
+
         },
         handleClickBack(){
             history.back()

@@ -11,17 +11,18 @@
     <h3>问卷名称：{{questionnaireName}}</h3>
     <div id="main-container">
         <el-row class="row-box" style="width: 80%" :key="item.id" v-for="(item, index) in tableData">
-            <el-col :span="24">
-                <span>第{{index + 1}}题：{{item.questionName}}</span>
-                <el-table :data="item.questionOption">
-                    <el-table-column prop="chooseTerm" label="选项">
-                    </el-table-column>
-                    <el-table-column  label="小计">
-                        <template v-slot="scope">
-                            {{Math.round(item.count/4)}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="比例">
+            <div id="``">
+                <el-col :span="24">
+                    <span>第{{index + 1}}题：{{item.questionName}}</span>
+                    <el-table :data="item.questionOption">
+                        <el-table-column prop="chooseTerm" label="选项">
+                        </el-table-column>
+                        <el-table-column  label="小计">
+                            <template v-slot="scope">
+                                {{Math.round(item.count/4)}}
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="比例">
                             <template slot-scope="{scope}">
                                 <el-progress
                                         style="width: 80%"
@@ -29,9 +30,12 @@
                                         :percentage="((item.count/4)/item.count)*100"
                                 ></el-progress>
                             </template>
-                    </el-table-column>
-                </el-table>
-            </el-col>
+                        </el-table-column>
+                    </el-table>
+
+                </el-col>
+            </div>
+
             <el-col>
                 <span>本题有效填写人：{{item.count}}</span>
             </el-col>
@@ -40,6 +44,9 @@
             <el-button style="margin: 5rem" @click="handleClickBack" type="primary">返回</el-button>
         </el-row>
     </div>
+    <el-dialog v-model="dialogVisible" title="统计信息">
+
+    </el-dialog>
 </div>
 </body>
 <script src="https://unpkg.com/vue@2/dist/vue.js"></script>

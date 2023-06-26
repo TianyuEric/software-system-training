@@ -117,4 +117,17 @@ public class QuestionController {
         boolean bool = !dtoList.isEmpty();
         return HttpResponseEntity.response(bool, "查询题库", dtoList);
     }
+
+    @PostMapping("/link")
+    public HttpResponseEntity getLinkQuestion(@RequestBody QuestionEntity questionEntity){
+        QuestionEntity question = questionService.getById(questionEntity.getId());
+        List<OptionEntity> optionEntities = optionService.lambdaQuery()
+                .eq(OptionEntity::getQuestionId, questionEntity.getId())
+                .list();
+
+        QuestionDto questionDto = QuestionDto.builder().isMust(question.getIsMust())
+                .name(question.getName()).type(question.getType())
+                .option(optionEntities).id(question.getId()).build();
+        return HttpResponseEntity.success("查询成功", questionDto);
+    }
 }

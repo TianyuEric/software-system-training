@@ -135,6 +135,7 @@ public class QuestionnaireController {
     public HttpResponseEntity questions(@RequestBody QuestionnaireEntity questionnaireEntity){
         List<QuestionEntity> questions = questionService.lambdaQuery()
                 .eq(QuestionEntity::getQuestionnaireId, questionnaireEntity.getId())
+                .ne(QuestionEntity::getIsLink, '1')
                 .list();
         List<QuestionDto> dtoList = questions.stream().map(e -> {
             List<OptionEntity> options = optionService.lambdaQuery()

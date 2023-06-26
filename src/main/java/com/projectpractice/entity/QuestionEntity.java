@@ -29,4 +29,5 @@ public class QuestionEntity {
     private String type;
     private String questionnaireId;
     private String isMust;
+    private String isLink;
 }
