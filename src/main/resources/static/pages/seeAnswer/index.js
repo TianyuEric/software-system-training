@@ -1,16 +1,18 @@
+let projectId = ""
 
 onload = () => {
   $('#headerUsername').text($util.getItem('userInfo').username)
   $('#headerDivB').text('答卷查看')
-  let projectId = $util.getPageParam('seeAnswer')
-  fetchAnswerInfoList(projectId)
+  projectId  = $util.getPageParam('seeAnswer')
+  console.log(projectId)
+  fetchAnswerInfoList()
 }
 
 
 let pageNum = 1
 let answerInfoList = []
-
-const fetchAnswerInfoList = (projectId) => {
+// projectId
+const fetchAnswerInfoList = () => {
   let params = {
     projectId,
     pageNum,

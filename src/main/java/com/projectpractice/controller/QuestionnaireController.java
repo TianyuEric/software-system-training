@@ -11,6 +11,7 @@ import com.projectpractice.entity.QuestionnaireEntity;
 import com.projectpractice.service.OptionService;
 import com.projectpractice.service.QuestionService;
 import com.projectpractice.service.QuestionnaireService;
+import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,10 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -205,52 +203,88 @@ public class QuestionnaireController {
         return HttpResponseEntity.success("相同问题", map);
     }
 
-    @PostMapping("/relate")
+    @PostMapping("/relate") // 使用@PostMapping注解的方法，表示这个方法用来处理发送到"/relate" URI的POST HTTP请求。
     public HttpResponseEntity relate(@RequestBody QuestionEntity questionEntity){
-        QuestionEntity question = questionService.lambdaQuery()
-                .eq(QuestionEntity::getId, questionEntity.getId())
-                .one();
-        QuestionnaireEntity questionnaire = questionnaireService.lambdaQuery()
-                .eq(QuestionnaireEntity::getId, question.getQuestionnaireId())
-                .one();
-        List<QuestionnaireEntity> list = questionnaireService.lambdaQuery()
-                .eq(QuestionnaireEntity::getProjectId, questionnaire.getProjectId())
-                .list();
-        int answerCount= 0;
-        List<OptionEntity> optionEntityList = optionService.lambdaQuery()
-                .eq(OptionEntity::getQuestionId, question.getId())
-                .list();
-        for (QuestionnaireEntity questionnaireEntity : list) {
-            List<QuestionEntity> questionEntities = questionService.lambdaQuery()
-                    .eq(QuestionEntity::getName, question.getName())
-                    .eq(QuestionEntity::getQuestionnaireId, questionnaireEntity.getId())
-                    .list();
-            for (QuestionEntity question1 : questionEntities) {
-                List<OptionEntity> optionEntities = optionService.lambdaQuery()
-                        .eq(OptionEntity::getQuestionId, question1.getId())
-                        .list();
-                answerCount += question1.getAnswerCount();
-                for (OptionEntity entity : optionEntityList) {
-                    int count = entity.getPersonCount();
-                    for (OptionEntity optionEntity : optionEntities) {
-                        if (optionEntity.getChooseTerm().equals(entity.getChooseTerm())) {
-                            count += optionEntity.getPersonCount();
+        // 定义处理请求的方法，该方法接受一个请求体为 QuestionEntity 对象的 HTTP 请求。
+
+        QuestionEntity question = questionService.lambdaQuery() // 通过 questionService 查询特定问题的详细信息。
+                .eq(QuestionEntity::getId, questionEntity.getId()) // 查找和请求中的 questionEntity ID 匹配的问题实体。
+                .one(); // 获取查询结果中的第一个（也应该是唯一的）问题实体。
+
+        QuestionnaireEntity questionnaire = questionnaireService.lambdaQuery() // 通过 questionnaireService 查询特定问卷的详细信息。
+                .eq(QuestionnaireEntity::getId, question.getQuestionnaireId()) // 查找和上面查询到的问题实体所关联的问卷实体。
+                .one(); // 获取查询结果中的第一个（也应该是唯一的）问卷实体。
+
+        List<QuestionnaireEntity> questionnaireEntityList = questionnaireService.lambdaQuery() // 通过 questionnaireService 查询特定项目的所有问卷信息。
+                .eq(QuestionnaireEntity::getProjectId, questionnaire.getProjectId()) // 查找和上面查询到的问卷实体所关联的项目的所有问卷。
+                .list(); // 获取查询结果，可能是多个问卷实体。
+
+        int answerCount= 0; // 初始化答案数量为 0。
+
+        List<OptionEntity> optionEntityList = optionService.lambdaQuery() // 通过 optionService 查询特定问题的所有选项信息。
+                .eq(OptionEntity::getQuestionId, question.getId()) // 查找和上面查询到的问题实体所关联的所有选项。
+                .list(); // 获取查询结果，可能是多个选项实体。
+
+        System.out.println("optionEntityList: " + optionEntityList.toString()); // 打印所有选项的信息。
+
+        for (QuestionnaireEntity questionnaireEntity : questionnaireEntityList) { // 遍历项目中的所有问卷。
+
+            System.out.println("Processing questionnaire: " + questionnaireEntity.getId()); // 打印正在处理的问卷的 ID。
+
+            List<QuestionEntity> questionEntities = questionService.lambdaQuery() // 通过 questionService 查询特定问卷的所有问题信息。
+                    .eq(QuestionEntity::getName, question.getName()) // 查找和初始查询到的问题名称相同的问题。
+                    .eq(QuestionEntity::getQuestionnaireId, questionnaireEntity.getId()) // 查找在当前正在处理的问卷中的问题。
+                    .list(); // 获取查询结果，可能是多个问题实体。
+
+            for (QuestionEntity question1 : questionEntities) { // 遍历问卷中的所有问题。
+
+                System.out.println("Found a question : " + question1.getId()); // 打印正在处理的问题的 ID。
+
+                List<OptionEntity> optionEntities = optionService.lambdaQuery() // 通过 optionService 查询遍历的问题的所有选项信息。
+                        .eq(OptionEntity::getQuestionId, question1.getId()) // 查找和当前正在处理的问题所关联的所有选项。
+                        .list(); // 获取查询结果，可能是多个选项实体。
+
+                System.out.println("optionEntities: " + optionEntities.toString()); // 打印所有选项的信息。
+
+                answerCount += question1.getAnswerCount(); // 将当前问题的答案数量加到总答案数量上。
+
+                for (OptionEntity falgEntity : optionEntityList) { // 遍历标杆问题的所有选项。标杆问题是对照物，遍历的问题和它进行对比 看一样不一样
+
+                    System.out.println("falgEntity.getChooseTerm() " + falgEntity.toString()); // 打印正在处理的选项的信息。
+
+                    int addCount = falgEntity.getPersonCount(); // 获取该选项的人数。
+
+                    for (OptionEntity optionEntity : optionEntities) { // 遍历当前问题的所有选项。
+
+                        System.out.println("optionEntity: " + optionEntity.toString()); // 打印当前选项的信息。
+
+                        if (optionEntity.getChooseTerm().equals(falgEntity.getChooseTerm())&&
+                                !Objects.equals(optionEntity.getId(), falgEntity.getId())) { // 如果当前选项和正在处理的选项一样。
+                            addCount += optionEntity.getPersonCount(); // 将当前选项的人数加到 addCount 上。
+                            System.out.println("Incrementing count for option " + optionEntity.getChooseTerm() + ": " + optionEntity.getPersonCount()); // 打印当前选项和增加的人数。
                         }
-                        entity.setPersonCount(count);
+
                     }
+                    falgEntity.setPersonCount(addCount); // 设置正在处理的选项的人数为 addCount。
+                    System.out.println("Set person count for option " + falgEntity.getChooseTerm() + ": " + addCount); // 打印设置后的选项和人数。
 
+                    System.out.println("====================================="); // 打印一行分隔符，用于在日志中分隔不同的处理环节。
                 }
-
             }
         }
-        QuestionStatisticDto statisticDto = QuestionStatisticDto.builder()
-                .id(question.getId())
-                .answerCount(answerCount)
-                .name(question.getName())
-                .option(optionEntityList)
-                .type(question.getType())
-                .build();
-        return HttpResponseEntity.success("相同问题统计", statisticDto);
+
+        QuestionStatisticDto statisticDto = QuestionStatisticDto.builder() // 使用 builder 模式构造一个新的 QuestionStatisticDto 对象。
+                .id(question.getId()) // 设置 ID 为问题的 ID。
+                .answerCount(answerCount) // 设置答案数量为 answerCount。
+                .name(question.getName()) // 设置名称为问题的名称。
+                .option(optionEntityList) // 设置选项为选项列表。
+                .type(question.getType()) // 设置类型为问题的类型。
+                .build(); // 构造 QuestionStatisticDto 对象。
+
+        return HttpResponseEntity.success("相同问题统计", statisticDto); // 返回一个包含统计结果的 HTTP 响应实体。
 
     }
+
+
+
 }
