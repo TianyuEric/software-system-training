@@ -10,6 +10,7 @@ import com.projectpractice.entity.QuestionEntity;
 import com.projectpractice.service.OptionService;
 import com.projectpractice.service.QuestionBankService;
 import com.projectpractice.service.QuestionService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,30 +25,15 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/question")
 @Slf4j
+@RequiredArgsConstructor // lombok will generate a constructor that autowires all final fields
+
 public class QuestionController {
 
-    private QuestionService questionService;
+    private final QuestionService questionService;
+    private final OptionService optionService;
+    private final QuestionBankService questionBankService;
 
-    private OptionService optionService;
-    private QuestionBankService questionBankService;
-    @Autowired
-    public void setQuestionBankService(QuestionBankService questionBankService) {
-        this.questionBankService = questionBankService;
-    }
-    @Autowired
-    public void setQuestionnaireService(QuestionService questionService) {
-        this.questionService = questionService;
-    }
-    @Autowired
-    public void setOptionService(OptionService optionService) {
-        this.optionService = optionService;
-    }
 
-    /**
-     * 编辑题目
-     * @param questionDto 问题dto
-     * @return HttpResponseEntity
-     */
     @PostMapping("/update")
     public HttpResponseEntity update(@RequestBody QuestionDto questionDto){
         log.error(questionDto.toString());
@@ -69,22 +55,14 @@ public class QuestionController {
         return HttpResponseEntity.response(bool, "编辑问题", null);
     }
 
-    /**
-     * 添加题目
-     * @param questionEntity 问题实体
-     * @return HttpResponseEntity
-     */
+
     @PostMapping("/add")
     public HttpResponseEntity insert(@RequestBody QuestionEntity questionEntity){
         boolean bool = questionService.save(questionEntity);
         return HttpResponseEntity.response(bool, "添加问题", questionEntity.getId());
     }
 
-    /**
-     *
-     * @param questionEntity 问题实体
-     * @return HttpResponseEntity
-     */
+
     @PostMapping("/delete")
     public HttpResponseEntity remove(@RequestBody QuestionEntity questionEntity){
         LambdaQueryWrapper<OptionEntity> queryWrapper = new LambdaQueryWrapper<>();
@@ -93,10 +71,6 @@ public class QuestionController {
         return HttpResponseEntity.response(bool, "删除问题", null);
     }
 
-    /**
-     * 查询所有题库
-     * @return HttpResponseEntity
-     */
     @PostMapping("/bank")
     public HttpResponseEntity listBank(){
         List<QuestionBankEntity> bankEntities = questionBankService.list();
@@ -124,11 +98,7 @@ public class QuestionController {
                 .option(optionEntities).id(question.getId()).build();
         return HttpResponseEntity.success("查询成功", questionDto);
     }
-    /**
-     * 获取相关问题的统计数据
-     * @param questionEntity 问题实体
-     * @return HttpResponseEntity
-     */
+
     @PostMapping("/statistic")
     public HttpResponseEntity getStatistic(@RequestBody QuestionEntity questionEntity){
         QuestionEntity question = questionService.lambdaQuery()
@@ -145,11 +115,7 @@ public class QuestionController {
         return HttpResponseEntity.success("查询成功", statisticDto);
     }
 
-    /**
-     * 获取包含关联问题的所有题目
-     * @param questionEntity 问题实体
-     * @return HttpResponseEntity
-     */
+
     @PostMapping("/all")
     public HttpResponseEntity getAll(@RequestBody QuestionEntity questionEntity){
         List<QuestionEntity> questionEntities = questionService.lambdaQuery()

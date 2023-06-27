@@ -7,7 +7,7 @@ import com.projectpractice.entity.*;
 import com.projectpractice.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,14 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * @BelongsProject: projectPractice
- * @BelongsPackage: com.projectpractice.controller
- * @Author: Tianyu Han
- * @CreateTime: 2023-06-23  14:33
- * @Description: AnswerController
- * @Version: 1.0
- */
 @RestController
 @RequestMapping("/answer")
 @Slf4j
@@ -39,67 +31,66 @@ public class AnswerController {
     private final AnswerService answerService;
     private final AnswerLinkService answerLinkService;
     private final ChosenAnswerService chosenAnswerService;
-    /**
-     * 分页查问卷的回答列表
-     * @param map map
-     * @return HttpResponseEntity
-     */
+
     @PostMapping("/list")
-    public HttpResponseEntity list(@RequestBody Map<String, Object> map){
+    public HttpResponseEntity list(@RequestBody Map<String, Object> map) {
         Integer pageNum = (Integer) map.get("pageNum");
         Integer pageSize = (Integer) map.get("pageSize");
         String username = (String) map.get("username");
         String projectId = (String) map.get("projectId");
-        List<AnswerInfoDto> answerInfoList = answerService.getAnswerInfoList(projectId, username ,pageSize, pageNum);
-        boolean bool = !answerInfoList.isEmpty();
-        return HttpResponseEntity.response(bool, "查询", answerInfoList);
+        List<AnswerInfoDto> answerInfoList = answerService.getAnswerInfoList(projectId, username, pageSize, pageNum);
+        boolean success = !answerInfoList.isEmpty();
+        return HttpResponseEntity.response(success, "查询", answerInfoList);
     }
 
-    /**
-     * 提交答案
-     * @param chosenAnswerDto 选择答案的dto
-     * @return HttpResponseEntity
-     */
     @PostMapping("/submit")
     @Transactional
-    public HttpResponseEntity submit(@RequestBody ChosenAnswerDto chosenAnswerDto){
-        AnswerEntity answerEntity = AnswerEntity.builder().questionnaireId(chosenAnswerDto.getQuestionnaireId())
-                .roleId(chosenAnswerDto.getRoleId()).answerTime(LocalDateTime.now()).build();
-        boolean bool = answerService.save(answerEntity);
-        List<Map<String, String>> answer = chosenAnswerDto.getAnswer();
+    public HttpResponseEntity submit(@RequestBody ChosenAnswerDto chosenAnswerDto) {
+        AnswerEntity answerEntity = AnswerEntity.builder()
+                .questionnaireId(chosenAnswerDto.getQuestionnaireId())
+                .roleId(chosenAnswerDto.getRoleId())
+                .answerTime(LocalDateTime.now())
+                .build();
+
+        boolean success = answerService.save(answerEntity);
+        List<Map<String, String>> answers = chosenAnswerDto.getAnswer();
         Map<String, Integer> countList = new HashMap<>();
-        for (Map<String, String> map : answer) {
-            String questionId = map.get("questionId");
-            String optionId = map.get("optionId");
-            OptionEntity optionEntity = optionService.lambdaQuery()
-                    .eq(OptionEntity::getId, optionId).one();
+
+        for (Map<String, String> answer : answers) {
+            String questionId = answer.get("questionId");
+            String optionId = answer.get("optionId");
+            OptionEntity optionEntity = optionService.getById(optionId);
             log.info(optionEntity.toString());
             optionEntity.setPersonCount(optionEntity.getPersonCount() + 1);
             optionService.updateById(optionEntity);
             countList.put(questionId, 1);
-            AnswerLinkEntity answerLink = AnswerLinkEntity.builder().questionId(questionId)
-                    .userId(chosenAnswerDto.getRoleId()).answerId(answerEntity.getId()).build();
+
+            AnswerLinkEntity answerLink = AnswerLinkEntity.builder()
+                    .questionId(questionId)
+                    .userId(chosenAnswerDto.getRoleId())
+                    .answerId(answerEntity.getId())
+                    .build();
             answerLinkService.save(answerLink);
-            ChosenAnswerEntity chosenAnswer = ChosenAnswerEntity.builder().linkId(answerLink.getId())
-                    .optionId(optionId).build();
+
+            ChosenAnswerEntity chosenAnswer = ChosenAnswerEntity.builder()
+                    .linkId(answerLink.getId())
+                    .optionId(optionId)
+                    .build();
             chosenAnswerService.save(chosenAnswer);
         }
-        for (String key : countList.keySet()){
-            QuestionEntity question = questionService.lambdaQuery()
-                    .eq(QuestionEntity::getId, key).one();
+
+        for (String questionId : countList.keySet()) {
+            QuestionEntity question = questionService.getById(questionId);
             question.setAnswerCount(question.getAnswerCount() + 1);
             questionService.updateById(question);
         }
-        return HttpResponseEntity.response(bool, "提交", null);
+
+        return HttpResponseEntity.response(success, "提交", null);
     }
 
-    /**
-     * 回看答题结果
-     * @param answerEntity 答题实体
-     * @return HttpResponseEntity
-     */
+
     @PostMapping("/review")
-    public HttpResponseEntity review(@RequestBody AnswerEntity answerEntity){
+    public HttpResponseEntity review(@RequestBody AnswerEntity answerEntity) {
         AnswerEntity answer = answerService.lambdaQuery()
                 .eq(AnswerEntity::getId, answerEntity.getId()).one();
         List<AnswerLinkEntity> linkEntities = answerLinkService.lambdaQuery()
@@ -115,6 +106,6 @@ public class AnswerController {
             return map;
         }).collect(Collectors.toList());
         boolean bool = !maps.isEmpty();
-       return HttpResponseEntity.response(bool, "回看", maps);
+        return HttpResponseEntity.response(bool, "回看", maps);
     }
 }

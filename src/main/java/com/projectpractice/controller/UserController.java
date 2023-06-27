@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.projectpractice.common.HttpResponseEntity;
 import com.projectpractice.entity.UserEntity;
 import com.projectpractice.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,30 +18,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * @BelongsProject: projectPractice
- * @BelongsPackage: com.projectpractice.controller
- * @Author: Tianyu Han
- * @CreateTime: 2023-06-03  19:01
- * @Description: UserController
- * @Version: 1.0
- */
+
 @RestController
 @RequestMapping("/admin")
+@RequiredArgsConstructor // lombok will generate a constructor that autowires all final fields
 public class UserController {
+    private final  UserService userService;
 
-    private UserService userService;
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    /**
-     * 用户登录
-     * @param userEntity 用户实体
-     * @param response HttpServletResponse
-     * @return HttpResponseEntity
-     */
     @PostMapping("/userLogin")
     public HttpResponseEntity userLogin(@RequestBody UserEntity userEntity, HttpServletResponse response){
         List<UserEntity> list = userService.query()
@@ -58,44 +42,28 @@ public class UserController {
         }
     }
 
-    /**
-     * 新增用户
-     * @param userEntity 用户实体
-     * @return HttpResponseEntity
-     */
+
     @PostMapping("/addUserInfo")
     public HttpResponseEntity addUserinfo(@RequestBody UserEntity userEntity){
         boolean bool = userService.save(userEntity);
         return HttpResponseEntity.response(bool, "创建", null);
     }
 
-    /**
-     * 修改用户
-     * @param userEntity 用户实体
-     * @return HttpResponseEntity
-     */
+
     @PostMapping("/modifyUserInfo")
     public HttpResponseEntity modifyUserinfo(@RequestBody UserEntity userEntity){
         boolean bool = userService.updateById(userEntity);
         return HttpResponseEntity.response(bool, "修改", null);
     }
 
-    /**
-     * 删除用户
-     * @param userEntity 用户实体
-     * @return HttpResponseEntity
-     */
+
     @PostMapping("/deleteUserinfo")
     public HttpResponseEntity deleteUserById(@RequestBody UserEntity userEntity){
         boolean bool = userService.removeById(userEntity);
         return HttpResponseEntity.response(bool, "删除", null);
     }
 
-    /**
-     * 用户列表查询
-     * @param map 查询参数
-     * @return HttpResponseEntity
-     */
+
     @PostMapping("/queryUserList")
     public HttpResponseEntity queryUserList(@RequestBody Map<String, Object> map){
         Page<UserEntity> page = new Page<>((Integer) map.get("pageNum"), (Integer) map.get("pageSize"));
@@ -106,11 +74,7 @@ public class UserController {
         return HttpResponseEntity.response(bool,"查询", list);
     }
 
-    /**
-     * 用户excel导出
-     * @param response HttpServletResponse
-     * @throws IOException IO异常
-     */
+
     @GetMapping("/exportExcel")
     public void exportExcel(HttpServletResponse response) throws IOException {
         List<UserEntity> users = userService.query().eq("status", "1").list();
