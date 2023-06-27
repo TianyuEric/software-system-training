@@ -3,6 +3,8 @@ package com.projectpractice.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.projectpractice.common.HttpResponseEntity;
 import com.projectpractice.dto.QuestionDto;
+import com.projectpractice.dto.QuestionStatisticDto;
+import com.projectpractice.dto.SameQuestionDto;
 import com.projectpractice.entity.OptionEntity;
 import com.projectpractice.entity.QuestionEntity;
 import com.projectpractice.entity.QuestionnaireEntity;
@@ -16,7 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -162,4 +167,90 @@ public class QuestionnaireController {
         return HttpResponseEntity.response(questionnaire != null, "链接", questionnaire);
     }
 
+    @PostMapping("/same")
+    public HttpResponseEntity querySameQuestion(@RequestBody QuestionEntity questionEntity){
+        QuestionnaireEntity questionnaire = questionnaireService.lambdaQuery()
+                .eq(QuestionnaireEntity::getId, questionEntity.getQuestionnaireId())
+                .one();
+        List<QuestionnaireEntity> questionnaireEntities = questionnaireService.lambdaQuery()
+                .eq(QuestionnaireEntity::getProjectId, questionnaire.getProjectId())
+                .ne(QuestionnaireEntity::getId, questionnaire.getId())
+                .list();
+        List<SameQuestionDto> arrayList = new ArrayList<>();
+        for (QuestionnaireEntity questionnaireEntity :questionnaireEntities) {
+            List<QuestionEntity> questionEntities = questionService.lambdaQuery()
+                    .eq(QuestionEntity::getQuestionnaireId, questionnaireEntity.getId())
+                    .list();
+            List<QuestionEntity> collect = questionEntities.stream().filter(e -> {
+                        if (e.getName() != null){
+                            return e.getName().equals(questionEntity.getName());
+                        } else {
+                            return false;
+                        }
+                    })
+                    .collect(Collectors.toList());
+            if (!collect.isEmpty()){
+                List<SameQuestionDto> questionDtos = collect.stream().map(e -> SameQuestionDto.builder()
+                        .questionnaireName(questionnaireEntity.getName())
+                        .questionId(e.getId())
+                        .count(e.getAnswerCount())
+                        .build()).collect(Collectors.toList());
+                arrayList.addAll(questionDtos);
+            }
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("data", arrayList);
+        map.put("total", arrayList.size());
+
+        return HttpResponseEntity.success("相同问题", map);
+    }
+
+    @PostMapping("/relate")
+    public HttpResponseEntity relate(@RequestBody QuestionEntity questionEntity){
+        QuestionEntity question = questionService.lambdaQuery()
+                .eq(QuestionEntity::getId, questionEntity.getId())
+                .one();
+        QuestionnaireEntity questionnaire = questionnaireService.lambdaQuery()
+                .eq(QuestionnaireEntity::getId, question.getQuestionnaireId())
+                .one();
+        List<QuestionnaireEntity> list = questionnaireService.lambdaQuery()
+                .eq(QuestionnaireEntity::getProjectId, questionnaire.getProjectId())
+                .list();
+        int answerCount= 0;
+        List<OptionEntity> optionEntityList = optionService.lambdaQuery()
+                .eq(OptionEntity::getQuestionId, question.getId())
+                .list();
+        for (QuestionnaireEntity questionnaireEntity : list) {
+            List<QuestionEntity> questionEntities = questionService.lambdaQuery()
+                    .eq(QuestionEntity::getName, question.getName())
+                    .eq(QuestionEntity::getQuestionnaireId, questionnaireEntity.getId())
+                    .list();
+            for (QuestionEntity question1 : questionEntities) {
+                List<OptionEntity> optionEntities = optionService.lambdaQuery()
+                        .eq(OptionEntity::getQuestionId, question1.getId())
+                        .list();
+                answerCount += question1.getAnswerCount();
+                for (OptionEntity entity : optionEntityList) {
+                    int count = entity.getPersonCount();
+                    for (OptionEntity optionEntity : optionEntities) {
+                        if (optionEntity.getChooseTerm().equals(entity.getChooseTerm())) {
+                            count += optionEntity.getPersonCount();
+                        }
+                        entity.setPersonCount(count);
+                    }
+
+                }
+
+            }
+        }
+        QuestionStatisticDto statisticDto = QuestionStatisticDto.builder()
+                .id(question.getId())
+                .answerCount(answerCount)
+                .name(question.getName())
+                .option(optionEntityList)
+                .type(question.getType())
+                .build();
+        return HttpResponseEntity.success("相同问题统计", statisticDto);
+
+    }
 }

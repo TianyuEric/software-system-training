@@ -3,6 +3,7 @@ package com.projectpractice.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.projectpractice.common.HttpResponseEntity;
 import com.projectpractice.dto.QuestionDto;
+import com.projectpractice.dto.QuestionStatisticDto;
 import com.projectpractice.entity.OptionEntity;
 import com.projectpractice.entity.QuestionBankEntity;
 import com.projectpractice.entity.QuestionEntity;
@@ -19,14 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * @BelongsProject: projectPractice
- * @BelongsPackage: com.projectpractice.controller
- * @Author: Tianyu Han
- * @CreateTime: 2023-06-21  21:29
- * @Description: QuestionController
- * @Version: 1.0
- */
+
 @RestController
 @RequestMapping("/question")
 @Slf4j
@@ -129,5 +123,46 @@ public class QuestionController {
                 .name(question.getName()).type(question.getType())
                 .option(optionEntities).id(question.getId()).build();
         return HttpResponseEntity.success("查询成功", questionDto);
+    }
+    /**
+     * 获取相关问题的统计数据
+     * @param questionEntity 问题实体
+     * @return HttpResponseEntity
+     */
+    @PostMapping("/statistic")
+    public HttpResponseEntity getStatistic(@RequestBody QuestionEntity questionEntity){
+        QuestionEntity question = questionService.lambdaQuery()
+                .eq(QuestionEntity::getId, questionEntity.getId()).one();
+        List<OptionEntity> optionEntities = optionService.lambdaQuery()
+                .eq(OptionEntity::getQuestionId, question.getId())
+                .list();
+        QuestionStatisticDto statisticDto = QuestionStatisticDto.builder()
+                .answerCount(question.getAnswerCount())
+                .id(question.getId())
+                .name(question.getName())
+                .type(question.getType())
+                .option(optionEntities).build();
+        return HttpResponseEntity.success("查询成功", statisticDto);
+    }
+
+    /**
+     * 获取包含关联问题的所有题目
+     * @param questionEntity 问题实体
+     * @return HttpResponseEntity
+     */
+    @PostMapping("/all")
+    public HttpResponseEntity getAll(@RequestBody QuestionEntity questionEntity){
+        List<QuestionEntity> questionEntities = questionService.lambdaQuery()
+                .eq(QuestionEntity::getQuestionnaireId, questionEntity.getQuestionnaireId())
+                .list();
+        List<QuestionDto> dtoList = questionEntities.stream().map(e -> {
+            List<OptionEntity> options = optionService.lambdaQuery()
+                    .eq(OptionEntity::getQuestionId, e.getId())
+                    .list();
+            return QuestionDto.builder().option(options)
+                    .id(e.getId()).name(e.getName()).answerCount(e.getAnswerCount()).build();
+        }).collect(Collectors.toList());
+        boolean bool = !dtoList.isEmpty();
+        return HttpResponseEntity.response(bool, "问卷问题查询", dtoList);
     }
 }

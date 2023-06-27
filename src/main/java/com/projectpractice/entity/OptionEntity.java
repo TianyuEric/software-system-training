@@ -29,4 +29,5 @@ public class OptionEntity {
     private Integer score;
     private Integer personCount;
     private String linkQuestionId;
+
 }
