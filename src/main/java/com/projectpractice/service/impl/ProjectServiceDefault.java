@@ -11,8 +11,15 @@ import org.springframework.stereotype.Service;
 public class ProjectServiceDefault
         extends ServiceImpl<ProjectMapper, ProjectEntity>
         implements ProjectService {
+
+
     @Override
-    public boolean removeByName(ProjectEntity projectEntity) {
-        return baseMapper.removeByName(projectEntity);
+    public boolean deleteByName(ProjectEntity projectEntity) {
+        //这里需要写一个方法，来删除表中的数据，而且是按照项目名称来删除的，不是按照id
+        if (projectEntity.getProjectName() != null) {
+            return baseMapper.deleteByName(projectEntity.getProjectName()) > 0;
+        }
+        return false;
     }
+
 }

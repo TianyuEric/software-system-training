@@ -50,7 +50,7 @@ public class ProjectController {
     // 删除项目
     @PostMapping("/deleteProjectByName")
     public HttpResponseEntity deleteProjectByName(@RequestBody ProjectEntity projectEntity){
-        return  HttpResponseEntity.response(projectService.removeByName(projectEntity), "deleteProject", null);
+        return  HttpResponseEntity.response(projectService.deleteByName(projectEntity), "deleteProjectByName", null);
     }
 
 }

@@ -30,7 +30,8 @@ const fetchProjectList = () => {
                 <button type="button" class="btn btn-link" onclick="onCreateQuestionnaire()">创建问卷</button>
                 <button type="button" class="btn btn-link" onclick="onSeeProject('${item.id}')">查看</button>
                 <button type="button" class="btn btn-link" onclick="onEditProject('${item.id}')">编辑</button>
-                <button type="button" class="btn btn-link" onclick="onDelProject('${item.id}')">删除</button>
+                <button type="button" class="btn btn-link" onclick="onDelProject('${item.id}')">按照id删除</button>
+                <button type="button" class="btn btn-link" onclick="onDelProject2('${item.projectName}')">按照name删除</button>
                 <button type="button" class="btn btn-link" onclick="onStat('${item.id}')">统计</button>
               </div>
             </div>
@@ -86,5 +87,26 @@ const onDelProject = (pid) => {
       }
     })
   }
-  
+}
+// 需要deleteProjectByName
+const onDelProject2 = (pprojectName) => {
+  let state = confirm("确认删除该项目吗？")
+
+  if (state) {
+    let params = {
+      projectName:pprojectName
+    }
+    //alert(JSON.stringify(params))
+    $.ajax({
+      url: API_BASE_URL + '/deleteProjectByName',
+      type: "POST",
+      data: JSON.stringify(params),
+      dataType: "json",
+      contentType: "application/json",
+      success(res) {
+        alert(res.message)
+        fetchProjectList()
+      }
+    })
+  }
 }
