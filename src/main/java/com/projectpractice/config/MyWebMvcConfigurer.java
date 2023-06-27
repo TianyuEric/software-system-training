@@ -10,26 +10,21 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
-/**
- * @BelongsProject: projectPractice
- * @BelongsPackage: com.projectpractice.config
- * @Author: Tianyu Han
- * @CreateTime: 2023-06-03  19:40
- * @Description: webMvc配置
- * @Version: 1.0
- */
+// webMvc配置
 @Configuration
-public class MyConfig implements WebMvcConfigurer {
+public class MyWebMvcConfigurer implements WebMvcConfigurer {
+
+    // 添加拦截器
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new UserInterceptor());
+        registry.addInterceptor(new UserInterceptor()); // 添加用户拦截器
     }
+
+    // 扩展消息转换器
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();
-        //设置对象转换器
         messageConverter.setObjectMapper(new JacksonObjectHandler());
-        //将消息转换器对象加入mvc的转换器集合中
         converters.add(0, messageConverter);
     }
 }

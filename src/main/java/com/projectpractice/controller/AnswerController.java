@@ -5,6 +5,7 @@ import com.projectpractice.dto.AnswerInfoDto;
 import com.projectpractice.dto.ChosenAnswerDto;
 import com.projectpractice.entity.*;
 import com.projectpractice.service.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,33 +31,14 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/answer")
 @Slf4j
+@RequiredArgsConstructor // lombok will generate a constructor that autowires all final fields
 public class AnswerController {
-    private AnswerService answerService;
-    private AnswerLinkService answerLinkService;
-    private ChosenAnswerService chosenAnswerService;
-    private OptionService optionService;
-    private QuestionService questionService;
-    @Autowired
-    public void setAnswerService(AnswerService answerService) {
-        this.answerService = answerService;
-    }
-    @Autowired
-    public void setAnswerLinkService(AnswerLinkService answerLinkService) {
-        this.answerLinkService = answerLinkService;
-    }
-    @Autowired
-    public void setChosenAnswerService(ChosenAnswerService chosenAnswerService) {
-        this.chosenAnswerService = chosenAnswerService;
-    }
-    @Autowired
-    public void setOptionService(OptionService optionService) {
-        this.optionService = optionService;
-    }
-    @Autowired
-    public void setQuestionService(QuestionService questionService) {
-        this.questionService = questionService;
-    }
 
+    private final OptionService optionService;
+    private final QuestionService questionService;
+    private final AnswerService answerService;
+    private final AnswerLinkService answerLinkService;
+    private final ChosenAnswerService chosenAnswerService;
     /**
      * 分页查问卷的回答列表
      * @param map map
