@@ -1,5 +1,6 @@
 package com.projectpractice.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.projectpractice.entity.ProjectEntity;
 import com.projectpractice.mapper.ProjectMapper;
@@ -19,7 +20,6 @@ public class ProjectServiceDefault
         if (projectEntity.getProjectName() != null) {
             return baseMapper.deleteByName(projectEntity.getProjectName()) > 0;
         }
-        return false;
+        return true;
     }
-
 }
