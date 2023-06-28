@@ -21,6 +21,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @AutoConfigureMockMvc
@@ -162,6 +165,25 @@ public class UserControllerTests {
         }
     }
 
+    @Test
+    void testQueryUserList() throws Exception {
+        Map<String, Object> map = new HashMap<>();
+        map.put("pageNum", 1);
+        map.put("pageSize", 5);
+        map.put("username", "testUser");
+
+        String body = JSON.toJSONString(map);
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/admin/queryUserList")
+                        .accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
+                        .content(body).characterEncoding("utf-8"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        assertThat(mvcResult.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
+        log.info(mvcResult.getResponse().getContentAsString());
+    }
 //    @Test
 //    void testDeleteUserInfo(){
 //        User userEntity = new User();
