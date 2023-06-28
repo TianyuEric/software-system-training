@@ -21,25 +21,22 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @RestController
 @RequestMapping("/question")
 @Slf4j
-@RequiredArgsConstructor // lombok will generate a constructor that autowires all final fields
-
+@RequiredArgsConstructor // 使用Lombok生成一个构造函数，自动注入所有final字段
 public class QuestionController {
 
     private final QuestionService questionService;
     private final OptionService optionService;
     private final QuestionBankService questionBankService;
 
-
     @PostMapping("/update")
-    public HttpResponseEntity update(@RequestBody QuestionDto questionDto){
+    public HttpResponseEntity updateQuestion(@RequestBody QuestionDto questionDto) {
         log.error(questionDto.toString());
-        LambdaQueryWrapper<OptionEntity> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(OptionEntity::getQuestionId, questionDto.getId());
-        optionService.remove(queryWrapper);
+        LambdaQueryWrapper<OptionEntity> optionQueryWrapper = new LambdaQueryWrapper<>();
+        optionQueryWrapper.eq(OptionEntity::getQuestionId, questionDto.getId());
+        optionService.remove(optionQueryWrapper);
         QuestionEntity question = QuestionEntity.builder()
                 .id(questionDto.getId())
                 .name(questionDto.getName())
@@ -51,30 +48,30 @@ public class QuestionController {
             option.setId(null);
             option.setQuestionId(questionDto.getId());
         }
-        boolean bool = optionService.saveBatch(options);
-        return HttpResponseEntity.response(bool, "编辑问题", null);
+        boolean success = optionService.saveBatch(options);
+        return HttpResponseEntity.response(success, "编辑问题", null);
     }
 
-
     @PostMapping("/add")
-    public HttpResponseEntity insert(@RequestBody QuestionEntity questionEntity){
-        boolean bool = questionService.save(questionEntity);
-        return HttpResponseEntity.response(bool, "添加问题", questionEntity.getId());
+    public HttpResponseEntity insertQuestion(@RequestBody QuestionEntity questionEntity) {
+        boolean success = questionService.save(questionEntity);
+        return HttpResponseEntity.response(success, "添加问题", questionEntity.getId());
     }
 
 
     @PostMapping("/delete")
-    public HttpResponseEntity remove(@RequestBody QuestionEntity questionEntity){
-        LambdaQueryWrapper<OptionEntity> queryWrapper = new LambdaQueryWrapper<>();
-        optionService.remove(queryWrapper.eq(OptionEntity::getQuestionId, questionEntity.getId()));
-        boolean bool = questionService.removeById(questionEntity);
-        return HttpResponseEntity.response(bool, "删除问题", null);
+    public HttpResponseEntity removeQuestion(@RequestBody QuestionEntity questionEntity) {
+        LambdaQueryWrapper<OptionEntity> optionQueryWrapper = new LambdaQueryWrapper<>();
+        optionService.remove(optionQueryWrapper.eq(OptionEntity::getQuestionId, questionEntity.getId()));
+        boolean success = questionService.removeById(questionEntity);
+        return HttpResponseEntity.response(success, "删除问题", null);
     }
 
+
     @PostMapping("/bank")
-    public HttpResponseEntity listBank(){
-        List<QuestionBankEntity> bankEntities = questionBankService.list();
-        List<QuestionDto> dtoList = bankEntities.stream().map(e -> {
+    public HttpResponseEntity listQuestionBanks() {
+        List<QuestionBankEntity> questionBankEntities = questionBankService.list();
+        List<QuestionDto> questionDtoList = questionBankEntities.stream().map(e -> {
             List<OptionEntity> optionEntities = optionService.lambdaQuery()
                     .eq(OptionEntity::getQuestionId, e.getId())
                     .list();
@@ -82,12 +79,12 @@ public class QuestionController {
                     .id(e.getId()).option(optionEntities)
                     .name(e.getName()).isMust("true").build();
         }).collect(Collectors.toList());
-        boolean bool = !dtoList.isEmpty();
-        return HttpResponseEntity.response(bool, "查询题库", dtoList);
+        boolean success = !questionDtoList.isEmpty();
+        return HttpResponseEntity.response(success, "查询题库", questionDtoList);
     }
 
     @PostMapping("/link")
-    public HttpResponseEntity getLinkQuestion(@RequestBody QuestionEntity questionEntity){
+    public HttpResponseEntity getLinkedQuestion(@RequestBody QuestionEntity questionEntity) {
         QuestionEntity question = questionService.getById(questionEntity.getId());
         List<OptionEntity> optionEntities = optionService.lambdaQuery()
                 .eq(OptionEntity::getQuestionId, questionEntity.getId())
@@ -99,8 +96,9 @@ public class QuestionController {
         return HttpResponseEntity.success("查询成功", questionDto);
     }
 
+
     @PostMapping("/statistic")
-    public HttpResponseEntity getStatistic(@RequestBody QuestionEntity questionEntity){
+    public HttpResponseEntity getQuestionStatistic(@RequestBody QuestionEntity questionEntity) {
         QuestionEntity question = questionService.lambdaQuery()
                 .eq(QuestionEntity::getId, questionEntity.getId()).one();
         List<OptionEntity> optionEntities = optionService.lambdaQuery()
@@ -117,18 +115,18 @@ public class QuestionController {
 
 
     @PostMapping("/all")
-    public HttpResponseEntity getAll(@RequestBody QuestionEntity questionEntity){
+    public HttpResponseEntity getAllQuestions(@RequestBody QuestionEntity questionEntity) {
         List<QuestionEntity> questionEntities = questionService.lambdaQuery()
                 .eq(QuestionEntity::getQuestionnaireId, questionEntity.getQuestionnaireId())
                 .list();
-        List<QuestionDto> dtoList = questionEntities.stream().map(e -> {
+        List<QuestionDto> questionDtoList = questionEntities.stream().map(e -> {
             List<OptionEntity> options = optionService.lambdaQuery()
                     .eq(OptionEntity::getQuestionId, e.getId())
                     .list();
             return QuestionDto.builder().option(options)
                     .id(e.getId()).name(e.getName()).answerCount(e.getAnswerCount()).build();
         }).collect(Collectors.toList());
-        boolean bool = !dtoList.isEmpty();
-        return HttpResponseEntity.response(bool, "问卷问题查询", dtoList);
+        boolean success = !questionDtoList.isEmpty();
+        return HttpResponseEntity.response(success, "问卷问题查询", questionDtoList);
     }
 }

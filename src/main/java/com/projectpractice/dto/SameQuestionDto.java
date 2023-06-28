@@ -5,14 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * @BelongsProject: projectPractice
- * @BelongsPackage: com.projectpractice.dto
- * @Author: Tianyu Han
- * @CreateTime: 2023-06-27  10:02
- * @Description: SameQuestionDto
- * @Version: 1.0
- */
+
 @Data
 @Builder
 @NoArgsConstructor

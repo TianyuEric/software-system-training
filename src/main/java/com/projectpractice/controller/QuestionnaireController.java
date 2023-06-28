@@ -33,13 +33,13 @@ public class QuestionnaireController {
     private final OptionService optionService;  // 选项服务类
     // 修改问卷
     @PostMapping("/update")
-    public HttpResponseEntity modify(@RequestBody QuestionnaireEntity questionnaireEntity) {
+    public HttpResponseEntity modifyQuestionnaire(@RequestBody QuestionnaireEntity questionnaireEntity) {
         return HttpResponseEntity.response(questionnaireService.updateById(questionnaireEntity), "修改问卷", null);
     }
 
     // 删除问卷
     @PostMapping("/delete")
-    public HttpResponseEntity delete(@RequestBody QuestionnaireEntity questionnaireEntity) {
+    public HttpResponseEntity deleteQuestionnaire(@RequestBody QuestionnaireEntity questionnaireEntity) {
         LambdaQueryWrapper<QuestionnaireEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.ne(QuestionnaireEntity::getStatus, "1");
         queryWrapper.eq(QuestionnaireEntity::getId, questionnaireEntity.getId());
@@ -48,7 +48,7 @@ public class QuestionnaireController {
 
     // 发布问卷
     @PostMapping("/release")
-    public HttpResponseEntity release(@RequestBody QuestionnaireEntity questionnaireEntity) {
+    public HttpResponseEntity releaseQuestionnaire(@RequestBody QuestionnaireEntity questionnaireEntity) {
         questionnaireEntity.setStatus("1");
         questionnaireEntity.setStartTime(LocalDateTime.now());
         return HttpResponseEntity.response(questionnaireService.updateById(questionnaireEntity), "发布问卷", null);
@@ -56,20 +56,20 @@ public class QuestionnaireController {
 
     // 关闭问卷
     @PostMapping("/close")
-    public HttpResponseEntity close(@RequestBody QuestionnaireEntity questionnaireEntity) {
+    public HttpResponseEntity closeQuestionnaire(@RequestBody QuestionnaireEntity questionnaireEntity) {
         return HttpResponseEntity.response(questionnaireService.updateById(questionnaireEntity), "关闭问卷", null);
     }
 
     // 添加问卷
     @PostMapping("/insert")
-    public HttpResponseEntity insert(@RequestBody QuestionnaireEntity questionnaireEntity) {
+    public HttpResponseEntity insertQuestionnaire(@RequestBody QuestionnaireEntity questionnaireEntity) {
         boolean bool = questionnaireService.save(questionnaireEntity);
         return HttpResponseEntity.response(bool, "新增问卷", questionnaireEntity.getId());
     }
 
     // 根据项目获取问卷列表
     @PostMapping("/list")
-    public HttpResponseEntity list(@RequestBody QuestionnaireEntity questionnaireEntity) {
+    public HttpResponseEntity listQuestionnaire(@RequestBody QuestionnaireEntity questionnaireEntity) {
         List<QuestionnaireEntity> list = questionnaireService.query()
                 .eq("project_id", questionnaireEntity.getProjectId())
                 .list();
@@ -97,7 +97,7 @@ public class QuestionnaireController {
 
     // 生成问卷链接
     @PostMapping("/link")
-    public HttpResponseEntity checkLink(@RequestBody QuestionnaireEntity questionnaireEntity) {
+    public HttpResponseEntity checkLinkOfQuestionnaire(@RequestBody QuestionnaireEntity questionnaireEntity) {
         QuestionnaireEntity questionnaire = questionnaireService.lambdaQuery()
                 .eq(QuestionnaireEntity::getStatus, "1")
                 .eq(QuestionnaireEntity::getId, questionnaireEntity.getId())
@@ -144,7 +144,7 @@ public class QuestionnaireController {
     }
 
     @PostMapping("/relate") // 使用@PostMapping注解的方法，表示这个方法用来处理发送到"/relate" URI的POST HTTP请求。
-    public HttpResponseEntity relate(@RequestBody QuestionEntity questionEntity){
+    public HttpResponseEntity relateStatistics(@RequestBody QuestionEntity questionEntity){
         // 定义处理请求的方法，该方法接受一个请求体为 QuestionEntity 对象的 HTTP 请求。
 
         QuestionEntity question = questionService.lambdaQuery() // 通过 questionService 查询特定问题的详细信息。
