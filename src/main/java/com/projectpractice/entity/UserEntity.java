@@ -1,5 +1,5 @@
 package com.projectpractice.entity;
-import com.alibaba.excel.annotation.ExcelProperty;
+
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
