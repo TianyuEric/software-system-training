@@ -9,14 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-/**
- * @BelongsProject: projectPractice
- * @BelongsPackage: com.projectpractice.entity
- * @Author: Tianyu Han
- * @CreateTime: 2023-06-12  21:00
- * @Description: Answer
- * @Version: 1.0
- */
+
 @Data
 @Builder
 @NoArgsConstructor

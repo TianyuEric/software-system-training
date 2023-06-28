@@ -8,14 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-/**
- * @BelongsProject: projectPractice
- * @BelongsPackage: com.projectpractice.dto
- * @Author: Tianyu Han
- * @CreateTime: 2023-06-26  10:25
- * @Description: QuestionStatisticDto
- * @Version: 1.0
- */
+
 @Data
 @Builder
 @NoArgsConstructor

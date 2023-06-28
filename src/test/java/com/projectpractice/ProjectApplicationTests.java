@@ -25,14 +25,6 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * @BelongsProject: projectPractice
- * @BelongsPackage: com.projectpractice
- * @Author: Tianyu Han
- * @CreateTime: 2023-06-05  19:27
- * @Description: projectTest
- * @Version: 1.0
- */
 @AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ProjectPracticeApplication.class)
