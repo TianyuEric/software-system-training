@@ -1,7 +1,7 @@
 package com.projectpractice.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.projectpractice.entity.ProjectEntity;
+import com.projectpractice.entity.Project;
 
-public interface ProjectService extends IService<ProjectEntity> {
+public interface ProjectService extends IService<Project> {
 }

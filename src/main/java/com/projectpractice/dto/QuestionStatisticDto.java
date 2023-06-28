@@ -1,6 +1,6 @@
 package com.projectpractice.dto;
 
-import com.projectpractice.entity.OptionEntity;
+import com.projectpractice.entity.Option;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,5 +18,5 @@ public class QuestionStatisticDto {
     private String name;
     private String type;
     private Integer answerCount;
-    private List<OptionEntity> option;
+    private List<Option> option;
 }

@@ -1,8 +1,8 @@
 package com.projectpractice.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.projectpractice.entity.QuestionnaireEntity;
+import com.projectpractice.entity.Questionnaire;
 
 
-public interface QuestionnaireService extends IService<QuestionnaireEntity> {
+public interface QuestionnaireService extends IService<Questionnaire> {
 }

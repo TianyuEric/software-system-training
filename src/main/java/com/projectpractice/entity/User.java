@@ -1,7 +1,9 @@
 package com.projectpractice.entity;
 
-
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,16 +12,21 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 
+@TableName("user_info")
 @Data
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
-@TableName("questionnaire_info")
-public class QuestionnaireEntity {
+@AllArgsConstructor
+@Builder
+public class User {
     @TableId
     private String id;
-    private String name;
-    private String comment;
+
+    private String username;
+    private String password;
+    private LocalDateTime startTime;
+    private LocalDateTime stopTime;
+    @TableField(fill = FieldFill.INSERT)
+    private String status;
     @TableField(fill = FieldFill.INSERT)
     private String createdBy;
     @TableField(fill = FieldFill.INSERT)
@@ -28,12 +35,5 @@ public class QuestionnaireEntity {
     private String lastUpdatedBy;
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime lastUpdateDate;
-    private String status;
-    private String surveyObject;
-    private String projectId;
-    private LocalDateTime startTime;
-    private LocalDateTime stopTime;
-    @TableLogic(value = "0", delval = "1")
-    private String isDelete;
 
 }

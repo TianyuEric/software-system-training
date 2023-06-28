@@ -47,33 +47,33 @@ public class AnswerController {
     @PostMapping("/submit")
     @Transactional
     public HttpResponseEntity submit(@RequestBody ChosenAnswerDto chosenAnswerDto) {
-        AnswerEntity answerEntity = AnswerEntity.builder()
+        Answer answer = Answer.builder()
                 .questionnaireId(chosenAnswerDto.getQuestionnaireId()) // 设置答案的问卷ID
                 .roleId(chosenAnswerDto.getRoleId()) // 设置答案的角色ID
                 .answerTime(LocalDateTime.now()) // 设置答案的提交时间为当前时间
                 .build();
 
-        boolean success = answerService.save(answerEntity); // 调用AnswerService的方法保存答案实体
+        boolean success = answerService.save(answer); // 调用AnswerService的方法保存答案实体
         List<Map<String, String>> chosenAnswers = chosenAnswerDto.getAnswer(); // 获取选定的答案列表
         Map<String, Integer> questionAnswerCountMap = new HashMap<>(); // 创建问题-答案数量的映射
 
         for (Map<String, String> chosenAnswer : chosenAnswers) {
             String questionId = chosenAnswer.get("questionId"); // 获取选定答案的问题ID
             String optionId = chosenAnswer.get("optionId"); // 获取选定答案的选项ID
-            OptionEntity selectedOption = optionService.getById(optionId); // 根据选项ID获取选项实体
+            Option selectedOption = optionService.getById(optionId); // 根据选项ID获取选项实体
             log.info(selectedOption.toString()); // 输出选项实体的信息
             selectedOption.setPersonCount(selectedOption.getPersonCount() + 1); // 选项的人数加1
             optionService.updateById(selectedOption); // 更新选项实体
             questionAnswerCountMap.put(questionId, 1); // 将问题ID和答案数量1添加到映射中
 
-            AnswerLinkEntity answerLink = AnswerLinkEntity.builder()
+            AnswerLink answerLink = AnswerLink.builder()
                     .questionId(questionId) // 设置答案链接的问题ID
                     .userId(chosenAnswerDto.getRoleId()) // 设置答案链接的用户ID
-                    .answerId(answerEntity.getId()) // 设置答案链接的答案ID
+                    .answerId(answer.getId()) // 设置答案链接的答案ID
                     .build();
             answerLinkService.save(answerLink); // 保存答案链接实体
 
-            ChosenAnswerEntity chosenAnswerEntity = ChosenAnswerEntity.builder()
+            ChosenAnswer chosenAnswerEntity = ChosenAnswer.builder()
                     .linkId(answerLink.getId()) // 设置选定答案的链接ID
                     .optionId(optionId) // 设置选定答案的选项ID
                     .build();
@@ -81,7 +81,7 @@ public class AnswerController {
         }
 
         for (String questionId : questionAnswerCountMap.keySet()) {
-            QuestionEntity question = questionService.getById(questionId); // 根据问题ID获取问题实体
+            Question question = questionService.getById(questionId); // 根据问题ID获取问题实体
             question.setAnswerCount(question.getAnswerCount() + 1); // 问题的答案数量加1
             questionService.updateById(question); // 更新问题实体
         }
@@ -91,16 +91,16 @@ public class AnswerController {
 
     // 回看答案的请求处理方法
     @PostMapping("/review")
-    public HttpResponseEntity review(@RequestBody AnswerEntity reviewAnswerEntity) {
-        AnswerEntity answer = answerService.lambdaQuery()
-                .eq(AnswerEntity::getId, reviewAnswerEntity.getId()).one(); // 根据答案ID获取答案实体
-        List<AnswerLinkEntity> answerLinks = answerLinkService.lambdaQuery()
-                .eq(AnswerLinkEntity::getAnswerId, answer.getId()).list(); // 根据答案ID获取答案链接列表
+    public HttpResponseEntity review(@RequestBody Answer reviewAnswer) {
+        Answer answer = answerService.lambdaQuery()
+                .eq(Answer::getId, reviewAnswer.getId()).one(); // 根据答案ID获取答案实体
+        List<AnswerLink> answerLinks = answerLinkService.lambdaQuery()
+                .eq(AnswerLink::getAnswerId, answer.getId()).list(); // 根据答案ID获取答案链接列表
         List<Map<String, Object>> chosenAnswers = answerLinks.stream().map(answerLink -> {
-            List<ChosenAnswerEntity> chosenAnswerEntities = chosenAnswerService.lambdaQuery()
-                    .eq(ChosenAnswerEntity::getLinkId, answerLink.getId()).list(); // 根据答案链接ID获取选定答案列表
+            List<ChosenAnswer> chosenAnswerEntities = chosenAnswerService.lambdaQuery()
+                    .eq(ChosenAnswer::getLinkId, answerLink.getId()).list(); // 根据答案链接ID获取选定答案列表
             Map<String, Object> chosenAnswerMap = new HashMap<>();
-            for (ChosenAnswerEntity chosenAnswerEntity : chosenAnswerEntities) {
+            for (ChosenAnswer chosenAnswerEntity : chosenAnswerEntities) {
                 chosenAnswerMap.put("questionId", answerLink.getQuestionId()); // 设置选定答案的问题ID
                 chosenAnswerMap.put("optionId", chosenAnswerEntity.getOptionId()); // 设置选定答案的选项ID
             }

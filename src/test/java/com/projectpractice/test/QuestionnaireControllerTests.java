@@ -2,10 +2,9 @@ package com.projectpractice.test;
 
 import com.alibaba.fastjson.JSON;
 import com.projectpractice.ProjectPracticeApplication;
-import com.projectpractice.entity.QuestionnaireEntity;
+import com.projectpractice.entity.Questionnaire;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,10 +42,10 @@ public class QuestionnaireControllerTests {
 
     @Test
     void testInsert(){
-        QuestionnaireEntity questionnaireEntity = new QuestionnaireEntity();
-        questionnaireEntity.setId("1672162078542974977");
+        Questionnaire questionnaire = new Questionnaire();
+        questionnaire.setId("1672162078542974977");
 
-        String body = JSON.toJSONString(questionnaireEntity);
+        String body = JSON.toJSONString(questionnaire);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/questionnaire/insert")
@@ -64,10 +63,10 @@ public class QuestionnaireControllerTests {
 
     @Test
     void testInsertWithEmpty(){
-        QuestionnaireEntity questionnaireEntity = new QuestionnaireEntity();
-//        questionnaireEntity.setId();
+        Questionnaire questionnaire = new Questionnaire();
+//        questionnaire.setId();
 
-        String body = JSON.toJSONString(questionnaireEntity);
+        String body = JSON.toJSONString(questionnaire);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/questionnaire/insert")
@@ -85,10 +84,10 @@ public class QuestionnaireControllerTests {
 
     @Test
     void testModify(){
-        QuestionnaireEntity questionnaireEntity = new QuestionnaireEntity();
-        questionnaireEntity.setId("1672162078542974977");
+        Questionnaire questionnaire = new Questionnaire();
+        questionnaire.setId("1672162078542974977");
 
-        String body = JSON.toJSONString(questionnaireEntity);
+        String body = JSON.toJSONString(questionnaire);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/questionnaire/update")
@@ -106,10 +105,10 @@ public class QuestionnaireControllerTests {
 
     @Test
     void testModifyWithEmpty(){
-        QuestionnaireEntity questionnaireEntity = new QuestionnaireEntity();
-        questionnaireEntity.setId("1672162078542932977");
+        Questionnaire questionnaire = new Questionnaire();
+        questionnaire.setId("1672162078542932977");
 
-        String body = JSON.toJSONString(questionnaireEntity);
+        String body = JSON.toJSONString(questionnaire);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/questionnaire/update")
@@ -127,10 +126,10 @@ public class QuestionnaireControllerTests {
 
     @Test
     void testList(){
-        QuestionnaireEntity questionnaireEntity = new QuestionnaireEntity();
-        questionnaireEntity.setId("1672162078542974977");
+        Questionnaire questionnaire = new Questionnaire();
+        questionnaire.setId("1672162078542974977");
 
-        String body = JSON.toJSONString(questionnaireEntity);
+        String body = JSON.toJSONString(questionnaire);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/questionnaire/list")
@@ -148,10 +147,10 @@ public class QuestionnaireControllerTests {
 
     @Test
     void testListWithEmpty(){
-        QuestionnaireEntity questionnaireEntity = new QuestionnaireEntity();
-        questionnaireEntity.setId("1672162078542932977");
+        Questionnaire questionnaire = new Questionnaire();
+        questionnaire.setId("1672162078542932977");
 
-        String body = JSON.toJSONString(questionnaireEntity);
+        String body = JSON.toJSONString(questionnaire);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/questionnaire/list")
@@ -169,10 +168,10 @@ public class QuestionnaireControllerTests {
 
     @Test
     void testDelete(){
-        QuestionnaireEntity questionnaireEntity = new QuestionnaireEntity();
-        questionnaireEntity.setId("1672162078542974977");
+        Questionnaire questionnaire = new Questionnaire();
+        questionnaire.setId("1672162078542974977");
 
-        String body = JSON.toJSONString(questionnaireEntity);
+        String body = JSON.toJSONString(questionnaire);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/questionnaire/delete")
@@ -190,10 +189,10 @@ public class QuestionnaireControllerTests {
 
     @Test
     void testDeleteWithEmpty(){
-        QuestionnaireEntity questionnaireEntity = new QuestionnaireEntity();
-        questionnaireEntity.setId("1672162078542932977");
+        Questionnaire questionnaire = new Questionnaire();
+        questionnaire.setId("1672162078542932977");
 
-        String body = JSON.toJSONString(questionnaireEntity);
+        String body = JSON.toJSONString(questionnaire);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/questionnaire/delete")
@@ -211,10 +210,10 @@ public class QuestionnaireControllerTests {
 
     @Test
     void testRelease(){
-        QuestionnaireEntity questionnaireEntity = new QuestionnaireEntity();
-        questionnaireEntity.setId("1672162078542974977");
+        Questionnaire questionnaire = new Questionnaire();
+        questionnaire.setId("1672162078542974977");
 
-        String body = JSON.toJSONString(questionnaireEntity);
+        String body = JSON.toJSONString(questionnaire);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/questionnaire/release")
@@ -232,10 +231,10 @@ public class QuestionnaireControllerTests {
 
     @Test
     void testReleaseWithEmpty(){
-        QuestionnaireEntity questionnaireEntity = new QuestionnaireEntity();
-        questionnaireEntity.setId("1672162078542932977");
+        Questionnaire questionnaire = new Questionnaire();
+        questionnaire.setId("1672162078542932977");
 
-        String body = JSON.toJSONString(questionnaireEntity);
+        String body = JSON.toJSONString(questionnaire);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/questionnaire/release")
@@ -253,10 +252,10 @@ public class QuestionnaireControllerTests {
 
     @Test
     void testClose(){
-        QuestionnaireEntity questionnaireEntity = new QuestionnaireEntity();
-        questionnaireEntity.setId("1672162078542974977");
+        Questionnaire questionnaire = new Questionnaire();
+        questionnaire.setId("1672162078542974977");
 
-        String body = JSON.toJSONString(questionnaireEntity);
+        String body = JSON.toJSONString(questionnaire);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/questionnaire/close")
@@ -274,10 +273,10 @@ public class QuestionnaireControllerTests {
 
     @Test
     void testCloseWithEmpty(){
-        QuestionnaireEntity questionnaireEntity = new QuestionnaireEntity();
-        questionnaireEntity.setId("1672162078542932977");
+        Questionnaire questionnaire = new Questionnaire();
+        questionnaire.setId("1672162078542932977");
 
-        String body = JSON.toJSONString(questionnaireEntity);
+        String body = JSON.toJSONString(questionnaire);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/questionnaire/close")
@@ -295,10 +294,10 @@ public class QuestionnaireControllerTests {
 
     @Test
     void testQuestions(){
-        QuestionnaireEntity questionnaireEntity = new QuestionnaireEntity();
-        questionnaireEntity.setId("1672162078542974977");
+        Questionnaire questionnaire = new Questionnaire();
+        questionnaire.setId("1672162078542974977");
 
-        String body = JSON.toJSONString(questionnaireEntity);
+        String body = JSON.toJSONString(questionnaire);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/questionnaire/questions")
@@ -316,10 +315,10 @@ public class QuestionnaireControllerTests {
 
     @Test
     void testQuestionsWithEmpty(){
-        QuestionnaireEntity questionnaireEntity = new QuestionnaireEntity();
-        questionnaireEntity.setId("1672162078542932977");
+        Questionnaire questionnaire = new Questionnaire();
+        questionnaire.setId("1672162078542932977");
 
-        String body = JSON.toJSONString(questionnaireEntity);
+        String body = JSON.toJSONString(questionnaire);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/questionnaire/questions")
@@ -337,10 +336,10 @@ public class QuestionnaireControllerTests {
 
     @Test
     void testCheckLink(){
-        QuestionnaireEntity questionnaireEntity = new QuestionnaireEntity();
-        questionnaireEntity.setId("1672162078542974977");
+        Questionnaire questionnaire = new Questionnaire();
+        questionnaire.setId("1672162078542974977");
 
-        String body = JSON.toJSONString(questionnaireEntity);
+        String body = JSON.toJSONString(questionnaire);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/questionnaire/link")
@@ -358,10 +357,10 @@ public class QuestionnaireControllerTests {
 
     @Test
     void testCheckLinkWithEmpty(){
-        QuestionnaireEntity questionnaireEntity = new QuestionnaireEntity();
-        questionnaireEntity.setId("1672162078542932977");
+        Questionnaire questionnaire = new Questionnaire();
+        questionnaire.setId("1672162078542932977");
 
-        String body = JSON.toJSONString(questionnaireEntity);
+        String body = JSON.toJSONString(questionnaire);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/questionnaire/link")
@@ -379,10 +378,10 @@ public class QuestionnaireControllerTests {
 
     @Test
     void testQuerySameQuestion(){
-        QuestionnaireEntity questionnaireEntity = new QuestionnaireEntity();
-        questionnaireEntity.setId("1672162078542974977");
+        Questionnaire questionnaire = new Questionnaire();
+        questionnaire.setId("1672162078542974977");
 
-        String body = JSON.toJSONString(questionnaireEntity);
+        String body = JSON.toJSONString(questionnaire);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/questionnaire/same")
@@ -399,8 +398,8 @@ public class QuestionnaireControllerTests {
     }
 //@Test
 //void testQuerySameQuestion() {
-//    // 创建一个 QuestionnaireEntity 对象作为请求体
-//    QuestionnaireEntity questionnaireEntity = QuestionnaireEntity.builder()
+//    // 创建一个 Questionnaire 对象作为请求体
+//    Questionnaire questionnaireEntity = Questionnaire.builder()
 //            .id("questionnaireId")
 //            .name("Questionnaire Name")
 //            .comment("Questionnaire Comment")
@@ -438,10 +437,10 @@ public class QuestionnaireControllerTests {
 
     @Test
     void testQuerySameQuestionWithEmpty(){
-        QuestionnaireEntity questionnaireEntity = new QuestionnaireEntity();
-        questionnaireEntity.setId("1672162078542932977");
+        Questionnaire questionnaire = new Questionnaire();
+        questionnaire.setId("1672162078542932977");
 
-        String body = JSON.toJSONString(questionnaireEntity);
+        String body = JSON.toJSONString(questionnaire);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/questionnaire/same")
@@ -459,10 +458,10 @@ public class QuestionnaireControllerTests {
 
     @Test
     void testRelate(){
-        QuestionnaireEntity questionnaireEntity = new QuestionnaireEntity();
-        questionnaireEntity.setId("1672162078542974977");
+        Questionnaire questionnaire = new Questionnaire();
+        questionnaire.setId("1672162078542974977");
 
-        String body = JSON.toJSONString(questionnaireEntity);
+        String body = JSON.toJSONString(questionnaire);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/questionnaire/relate")
@@ -480,10 +479,10 @@ public class QuestionnaireControllerTests {
 
     @Test
     void testRelateWithEmpty(){
-        QuestionnaireEntity questionnaireEntity = new QuestionnaireEntity();
-        questionnaireEntity.setId("1672162078542932977");
+        Questionnaire questionnaire = new Questionnaire();
+        questionnaire.setId("1672162078542932977");
 
-        String body = JSON.toJSONString(questionnaireEntity);
+        String body = JSON.toJSONString(questionnaire);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/questionnaire/relate")

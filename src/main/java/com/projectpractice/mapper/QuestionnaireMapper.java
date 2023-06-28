@@ -1,10 +1,10 @@
 package com.projectpractice.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.projectpractice.entity.QuestionnaireEntity;
+import com.projectpractice.entity.Questionnaire;
 import org.apache.ibatis.annotations.Mapper;
 
 
 @Mapper
-public interface QuestionnaireMapper extends BaseMapper<QuestionnaireEntity> {
+public interface QuestionnaireMapper extends BaseMapper<Questionnaire> {
 }

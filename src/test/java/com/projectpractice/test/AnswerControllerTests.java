@@ -2,12 +2,9 @@ package com.projectpractice.test;
 
 import com.alibaba.fastjson.JSON;
 import com.projectpractice.ProjectPracticeApplication;
-import com.projectpractice.common.HttpResponseEntity;
 import com.projectpractice.dto.ChosenAnswerDto;
-import com.projectpractice.entity.AnswerEntity;
-import com.projectpractice.entity.OptionEntity;
+import com.projectpractice.entity.Answer;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -246,11 +243,11 @@ class AnswerControllerTests {
     @Test
     void testReviewAnswer() {
         // 创建测试数据
-        AnswerEntity answerEntity = new AnswerEntity();
-        answerEntity.setId("1673133010426220545");
+        Answer answer = new Answer();
+        answer.setId("1673133010426220545");
 
         // 将测试数据转换为 JSON 字符串
-        String body = JSON.toJSONString(answerEntity);
+        String body = JSON.toJSONString(answer);
 
         // 执行测试
         MvcResult mvcResult;
@@ -301,10 +298,10 @@ class AnswerControllerTests {
 
     @Test
     void testReview(){
-        AnswerEntity answerEntity = new AnswerEntity();
-        answerEntity.setId("1673133010426220545");
+        Answer answer = new Answer();
+        answer.setId("1673133010426220545");
 
-        String body = JSON.toJSONString(answerEntity);
+        String body = JSON.toJSONString(answer);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/answer/review")

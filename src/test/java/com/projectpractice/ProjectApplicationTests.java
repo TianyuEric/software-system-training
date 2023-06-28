@@ -1,8 +1,8 @@
 package com.projectpractice;
 
 import com.alibaba.fastjson.JSON;
-import com.projectpractice.entity.ProjectEntity;
-import com.projectpractice.entity.UserEntity;
+import com.projectpractice.entity.Project;
+import com.projectpractice.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,10 +44,10 @@ class ProjectApplicationTests {
 
     @Test
     void testQueryProjectReturnNull(){
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setProjectName("yyyyyy");
-        projectEntity.setId("1");
-        String body = JSON.toJSONString(projectEntity);
+        Project project = new Project();
+        project.setProjectName("yyyyyy");
+        project.setId("1");
+        String body = JSON.toJSONString(project);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/queryProjectList")
@@ -67,10 +67,10 @@ class ProjectApplicationTests {
     @Test
     void testQueryProject(){
         MvcResult mvcResult;
-        ProjectEntity projectEntity2 = new ProjectEntity();
-        projectEntity2.setProjectName(null);
-        projectEntity2.setId(null);
-        String body2 = JSON.toJSONString(projectEntity2);
+        Project project2 = new Project();
+        project2.setProjectName(null);
+        project2.setId(null);
+        String body2 = JSON.toJSONString(project2);
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/queryProjectList")
                             .accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
@@ -87,10 +87,10 @@ class ProjectApplicationTests {
 
     @Test
     void testAddProject(){
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setProjectName("hhhhh");
-        projectEntity.setProjectContent("eeeee");
-        String body = JSON.toJSONString(projectEntity);
+        Project project = new Project();
+        project.setProjectName("hhhhh");
+        project.setProjectContent("eeeee");
+        String body = JSON.toJSONString(project);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/addProjectInfo")
@@ -108,11 +108,11 @@ class ProjectApplicationTests {
 
     @Test
     void testModifyProject(){
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setId("1");
-        projectEntity.setProjectName("hhhhh");
-        projectEntity.setProjectContent("55555");
-        String body = JSON.toJSONString(projectEntity);
+        Project project = new Project();
+        project.setId("1");
+        project.setProjectName("hhhhh");
+        project.setProjectContent("55555");
+        String body = JSON.toJSONString(project);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/modifyProjectInfo")
@@ -130,9 +130,9 @@ class ProjectApplicationTests {
 
     @Test
     void testProjectDelete(){
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setId("1");
-        String body = JSON.toJSONString(projectEntity);
+        Project project = new Project();
+        project.setId("1");
+        String body = JSON.toJSONString(project);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/deleteProjectById")
@@ -150,22 +150,22 @@ class ProjectApplicationTests {
 
     @Test
     void testEntity(){
-        String str = UserEntity.builder().id("").createdBy("")
+        String str = User.builder().id("").createdBy("")
                 .creationDate(LocalDateTime.now()).startTime(LocalDateTime.now()).password("")
                 .lastUpdatedBy("").status("").lastUpdateDate(LocalDateTime.now()).username("")
                 .stopTime(LocalDateTime.now()).build().toString();
-        String aaa = UserEntity.builder().toString();
-        UserEntity userEntity = new UserEntity();
-        UserEntity userEntity1 = new UserEntity();
-        boolean equals = userEntity.equals(userEntity1);
-        log.info(str + aaa + userEntity.hashCode());
-        String str2 = ProjectEntity.builder().id("").creationDate(LocalDateTime.now()).createdBy("").projectName("").projectContent("")
+        String aaa = User.builder().toString();
+        User user = new User();
+        User user1 = new User();
+        boolean equals = user.equals(user1);
+        log.info(str + aaa + user.hashCode());
+        String str2 = Project.builder().id("").creationDate(LocalDateTime.now()).createdBy("").projectName("").projectContent("")
                 .userId("").lastUpdateDate(LocalDateTime.now()).lastUpdatedBy("").build().toString();
-        String bbb = ProjectEntity.builder().toString();
-        ProjectEntity projectEntity = new ProjectEntity();
-        ProjectEntity projectEntity1 = new ProjectEntity();
-        boolean equals1 = projectEntity.equals(projectEntity1);
-        log.info(str2 + bbb + projectEntity.hashCode());
+        String bbb = Project.builder().toString();
+        Project project = new Project();
+        Project project1 = new Project();
+        boolean equals1 = project.equals(project1);
+        log.info(str2 + bbb + project.hashCode());
     }
 
 

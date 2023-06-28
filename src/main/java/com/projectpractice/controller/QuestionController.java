@@ -4,15 +4,14 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.projectpractice.common.HttpResponseEntity;
 import com.projectpractice.dto.QuestionDto;
 import com.projectpractice.dto.QuestionStatisticDto;
-import com.projectpractice.entity.OptionEntity;
-import com.projectpractice.entity.QuestionBankEntity;
-import com.projectpractice.entity.QuestionEntity;
+import com.projectpractice.entity.Option;
+import com.projectpractice.entity.Question;
+import com.projectpractice.entity.QuestionBank;
 import com.projectpractice.service.OptionService;
 import com.projectpractice.service.QuestionBankService;
 import com.projectpractice.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,17 +33,17 @@ public class QuestionController {
     @PostMapping("/update")
     public HttpResponseEntity updateQuestion(@RequestBody QuestionDto questionDto) {
         log.error(questionDto.toString());
-        LambdaQueryWrapper<OptionEntity> optionQueryWrapper = new LambdaQueryWrapper<>();
-        optionQueryWrapper.eq(OptionEntity::getQuestionId, questionDto.getId());
+        LambdaQueryWrapper<Option> optionQueryWrapper = new LambdaQueryWrapper<>();
+        optionQueryWrapper.eq(Option::getQuestionId, questionDto.getId());
         optionService.remove(optionQueryWrapper);
-        QuestionEntity question = QuestionEntity.builder()
+        Question question = Question.builder()
                 .id(questionDto.getId())
                 .name(questionDto.getName())
                 .isMust(questionDto.getIsMust())
                 .build();
         questionService.updateById(question);
-        List<OptionEntity> options = questionDto.getOption();
-        for (OptionEntity option : options) {
+        List<Option> options = questionDto.getOption();
+        for (Option option : options) {
             option.setId(null);
             option.setQuestionId(questionDto.getId());
         }
@@ -53,27 +52,27 @@ public class QuestionController {
     }
 
     @PostMapping("/add")
-    public HttpResponseEntity insertQuestion(@RequestBody QuestionEntity questionEntity) {
-        boolean success = questionService.save(questionEntity);
-        return HttpResponseEntity.response(success, "添加问题", questionEntity.getId());
+    public HttpResponseEntity insertQuestion(@RequestBody Question question) {
+        boolean success = questionService.save(question);
+        return HttpResponseEntity.response(success, "添加问题", question.getId());
     }
 
 
     @PostMapping("/delete")
-    public HttpResponseEntity removeQuestion(@RequestBody QuestionEntity questionEntity) {
-        LambdaQueryWrapper<OptionEntity> optionQueryWrapper = new LambdaQueryWrapper<>();
-        optionService.remove(optionQueryWrapper.eq(OptionEntity::getQuestionId, questionEntity.getId()));
-        boolean success = questionService.removeById(questionEntity);
+    public HttpResponseEntity removeQuestion(@RequestBody Question question) {
+        LambdaQueryWrapper<Option> optionQueryWrapper = new LambdaQueryWrapper<>();
+        optionService.remove(optionQueryWrapper.eq(Option::getQuestionId, question.getId()));
+        boolean success = questionService.removeById(question);
         return HttpResponseEntity.response(success, "删除问题", null);
     }
 
 
     @PostMapping("/bank")
     public HttpResponseEntity listQuestionBanks() {
-        List<QuestionBankEntity> questionBankEntities = questionBankService.list();
+        List<QuestionBank> questionBankEntities = questionBankService.list();
         List<QuestionDto> questionDtoList = questionBankEntities.stream().map(e -> {
-            List<OptionEntity> optionEntities = optionService.lambdaQuery()
-                    .eq(OptionEntity::getQuestionId, e.getId())
+            List<Option> optionEntities = optionService.lambdaQuery()
+                    .eq(Option::getQuestionId, e.getId())
                     .list();
             return QuestionDto.builder().type(e.getType())
                     .id(e.getId()).option(optionEntities)
@@ -84,10 +83,10 @@ public class QuestionController {
     }
 
     @PostMapping("/link")
-    public HttpResponseEntity getLinkedQuestion(@RequestBody QuestionEntity questionEntity) {
-        QuestionEntity question = questionService.getById(questionEntity.getId());
-        List<OptionEntity> optionEntities = optionService.lambdaQuery()
-                .eq(OptionEntity::getQuestionId, questionEntity.getId())
+    public HttpResponseEntity getLinkedQuestion(@RequestBody Question questionEntity) {
+        Question question = questionService.getById(questionEntity.getId());
+        List<Option> optionEntities = optionService.lambdaQuery()
+                .eq(Option::getQuestionId, questionEntity.getId())
                 .list();
 
         QuestionDto questionDto = QuestionDto.builder().isMust(question.getIsMust())
@@ -98,11 +97,11 @@ public class QuestionController {
 
 
     @PostMapping("/statistic")
-    public HttpResponseEntity getQuestionStatistic(@RequestBody QuestionEntity questionEntity) {
-        QuestionEntity question = questionService.lambdaQuery()
-                .eq(QuestionEntity::getId, questionEntity.getId()).one();
-        List<OptionEntity> optionEntities = optionService.lambdaQuery()
-                .eq(OptionEntity::getQuestionId, question.getId())
+    public HttpResponseEntity getQuestionStatistic(@RequestBody Question questionEntity) {
+        Question question = questionService.lambdaQuery()
+                .eq(Question::getId, questionEntity.getId()).one();
+        List<Option> optionEntities = optionService.lambdaQuery()
+                .eq(Option::getQuestionId, question.getId())
                 .list();
         QuestionStatisticDto statisticDto = QuestionStatisticDto.builder()
                 .answerCount(question.getAnswerCount())
@@ -115,13 +114,13 @@ public class QuestionController {
 
 
     @PostMapping("/all")
-    public HttpResponseEntity getAllQuestions(@RequestBody QuestionEntity questionEntity) {
-        List<QuestionEntity> questionEntities = questionService.lambdaQuery()
-                .eq(QuestionEntity::getQuestionnaireId, questionEntity.getQuestionnaireId())
+    public HttpResponseEntity getAllQuestions(@RequestBody Question question) {
+        List<Question> questionEntities = questionService.lambdaQuery()
+                .eq(Question::getQuestionnaireId, question.getQuestionnaireId())
                 .list();
         List<QuestionDto> questionDtoList = questionEntities.stream().map(e -> {
-            List<OptionEntity> options = optionService.lambdaQuery()
-                    .eq(OptionEntity::getQuestionId, e.getId())
+            List<Option> options = optionService.lambdaQuery()
+                    .eq(Option::getQuestionId, e.getId())
                     .list();
             return QuestionDto.builder().option(options)
                     .id(e.getId()).name(e.getName()).answerCount(e.getAnswerCount()).build();

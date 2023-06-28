@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class ProjectPracticeApplication {
 
     public static void main(String[] args) {
-
         SpringApplication.run(ProjectPracticeApplication.class, args);
     }
 

@@ -1,6 +1,6 @@
 package com.projectpractice.dto;
 
-import com.projectpractice.entity.OptionEntity;
+import com.projectpractice.entity.Option;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +18,6 @@ public class QuestionDto {
     private String name;
     private String isMust;
     private String type;
-    private List<OptionEntity> option;
+    private List<Option> option;
     private Integer answerCount;
 }

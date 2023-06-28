@@ -9,18 +9,17 @@ import lombok.NoArgsConstructor;
 
 
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
-@TableName("question_info")
-public class QuestionEntity {
+@NoArgsConstructor
+@Builder
+@TableName("option_info")
+public class Option {
     @TableId
     private String id;
-    private String name;
-    private String content;
-    private Integer answerCount;
-    private String type;
-    private String questionnaireId;
-    private String isMust;
-    private String isLink;
+    private String chooseTerm;
+    private String questionId;
+    private Integer score;
+    private Integer personCount;
+    private String linkQuestionId;
+
 }

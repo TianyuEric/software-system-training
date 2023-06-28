@@ -2,13 +2,9 @@ package com.projectpractice.test;
 
 import com.alibaba.fastjson.JSON;
 import com.projectpractice.ProjectPracticeApplication;
-import com.projectpractice.dto.ChosenAnswerDto;
-import com.projectpractice.entity.AnswerEntity;
-import com.projectpractice.entity.ProjectEntity;
-import com.projectpractice.entity.UserEntity;
+import com.projectpractice.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +20,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -52,12 +43,12 @@ public class UserControllerTests {
 
     @Test
     void testAddUserinfo(){
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId("1672162078542974977");
-        userEntity.setPassword("admin");
-        userEntity.setStatus("1");
+        User user = new User();
+        user.setId("1672162078542974977");
+        user.setPassword("admin");
+        user.setStatus("1");
 
-        String body = JSON.toJSONString(userEntity);
+        String body = JSON.toJSONString(user);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/admin/addUserInfo")
@@ -75,12 +66,12 @@ public class UserControllerTests {
 
     @Test
     void testAddUserinfoWithEmpty(){
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId("1672162078542974975");
-        userEntity.setPassword("admin");
-        userEntity.setStatus("1");
+        User user = new User();
+        user.setId("1672162078542974975");
+        user.setPassword("admin");
+        user.setStatus("1");
 
-        String body = JSON.toJSONString(userEntity);
+        String body = JSON.toJSONString(user);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/admin/addUserInfo")
@@ -98,12 +89,12 @@ public class UserControllerTests {
 
     @Test
     void testModifyUserinfo(){
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId("1672162078542974977");
-        userEntity.setPassword("admin");
-        userEntity.setStatus("1");
+        User user = new User();
+        user.setId("1672162078542974977");
+        user.setPassword("admin");
+        user.setStatus("1");
 
-        String body = JSON.toJSONString(userEntity);
+        String body = JSON.toJSONString(user);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/admin/modifyUserInfo")
@@ -122,13 +113,13 @@ public class UserControllerTests {
     @Test
     void testModifyUserInfo() {
         // 创建一个模拟的UserEntity对象作为输入参数
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId("1672162078542974977");
-        userEntity.setPassword("admin");
-        userEntity.setStatus("1");
+        User user = new User();
+        user.setId("1672162078542974977");
+        user.setPassword("admin");
+        user.setStatus("1");
 
         // 将UserEntity对象转换为JSON字符串
-        String body = JSON.toJSONString(userEntity);
+        String body = JSON.toJSONString(user);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/admin/modifyUserInfo")
@@ -150,12 +141,12 @@ public class UserControllerTests {
 
     @Test
     void testModifyUserinfoWithEmpty(){
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId("1672162078542974975");
-        userEntity.setPassword("admin");
-        userEntity.setStatus("1");
+        User user = new User();
+        user.setId("1672162078542974975");
+        user.setPassword("admin");
+        user.setStatus("1");
 
-        String body = JSON.toJSONString(userEntity);
+        String body = JSON.toJSONString(user);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/admin/modifyUserInfo")
@@ -173,7 +164,7 @@ public class UserControllerTests {
 
 //    @Test
 //    void testDeleteUserInfo(){
-//        UserEntity userEntity = new UserEntity();
+//        User userEntity = new User();
 //        userEntity.setId("1672162078542974977");
 //        userEntity.setPassword("admin");
 //        userEntity.setStatus("1");
@@ -196,7 +187,7 @@ public class UserControllerTests {
 
 //    @Test
 //    void testDeleteUserInfoWithEmpty(){
-//        UserEntity userEntity = new UserEntity();
+//        User userEntity = new User();
 //        userEntity.setId("1672162078542974975");
 //        userEntity.setPassword("admin");
 //        userEntity.setStatus("1");

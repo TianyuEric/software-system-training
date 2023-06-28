@@ -1,8 +1,8 @@
 package com.projectpractice.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.projectpractice.entity.AnswerLinkEntity;
+import com.projectpractice.entity.AnswerLink;
 
 
-public interface AnswerLinkService extends IService<AnswerLinkEntity> {
+public interface AnswerLinkService extends IService<AnswerLink> {
 }

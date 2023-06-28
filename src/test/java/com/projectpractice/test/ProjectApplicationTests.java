@@ -1,29 +1,11 @@
 package com.projectpractice.test;
 
-import com.alibaba.fastjson.JSON;
 import com.projectpractice.ProjectPracticeApplication;
-import com.projectpractice.entity.ProjectEntity;
-import com.projectpractice.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-
-import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -47,7 +29,7 @@ class ProjectApplicationTests {
 //
 //    @Test
 //    void testQueryProjectReturnNull(){
-//        ProjectEntity projectEntity = new ProjectEntity();
+//        Project projectEntity = new Project();
 //        projectEntity.setProjectName("yyyyyy");
 //        projectEntity.setId("1");
 //        String body = JSON.toJSONString(projectEntity);
@@ -70,7 +52,7 @@ class ProjectApplicationTests {
 //    @Test
 //    void testQueryProject(){
 //        MvcResult mvcResult;
-//        ProjectEntity projectEntity2 = new ProjectEntity();
+//        Project projectEntity2 = new Project();
 //        projectEntity2.setProjectName(null);
 //        projectEntity2.setId(null);
 //        String body2 = JSON.toJSONString(projectEntity2);
@@ -90,7 +72,7 @@ class ProjectApplicationTests {
 //
 //    @Test
 //    void testAddProject(){
-//        ProjectEntity projectEntity = new ProjectEntity();
+//        Project projectEntity = new Project();
 //        projectEntity.setProjectName("hhhhh");
 //        projectEntity.setProjectContent("eeeee");
 //        String body = JSON.toJSONString(projectEntity);
@@ -111,7 +93,7 @@ class ProjectApplicationTests {
 //
 //    @Test
 //    void testModifyProject(){
-//        ProjectEntity projectEntity = new ProjectEntity();
+//        Project projectEntity = new Project();
 //        projectEntity.setId("1");
 //        projectEntity.setProjectName("hhhhh");
 //        projectEntity.setProjectContent("55555");
@@ -133,7 +115,7 @@ class ProjectApplicationTests {
 //
 //    @Test
 //    void testProjectDelete(){
-//        ProjectEntity projectEntity = new ProjectEntity();
+//        Project projectEntity = new Project();
 //        projectEntity.setId("1");
 //        String body = JSON.toJSONString(projectEntity);
 //        MvcResult mvcResult;
@@ -153,20 +135,20 @@ class ProjectApplicationTests {
 //
 //    @Test
 //    void testEntity(){
-//        String str = UserEntity.builder().id("").createdBy("")
+//        String str = User.builder().id("").createdBy("")
 //                .creationDate(LocalDateTime.now()).startTime(LocalDateTime.now()).password("")
 //                .lastUpdatedBy("").status("").lastUpdateDate(LocalDateTime.now()).username("")
 //                .stopTime(LocalDateTime.now()).build().toString();
-//        String aaa = UserEntity.builder().toString();
-//        UserEntity userEntity = new UserEntity();
-//        UserEntity userEntity1 = new UserEntity();
+//        String aaa = User.builder().toString();
+//        User userEntity = new User();
+//        User userEntity1 = new User();
 //        boolean equals = userEntity.equals(userEntity1);
 //        log.info(str + aaa + userEntity.hashCode());
-//        String str2 = ProjectEntity.builder().id("").creationDate(LocalDateTime.now()).createdBy("").projectName("").projectContent("")
+//        String str2 = Project.builder().id("").creationDate(LocalDateTime.now()).createdBy("").projectName("").projectContent("")
 //                .userId("").lastUpdateDate(LocalDateTime.now()).lastUpdatedBy("").build().toString();
-//        String bbb = ProjectEntity.builder().toString();
-//        ProjectEntity projectEntity = new ProjectEntity();
-//        ProjectEntity projectEntity1 = new ProjectEntity();
+//        String bbb = Project.builder().toString();
+//        Project projectEntity = new Project();
+//        Project projectEntity1 = new Project();
 //        boolean equals1 = projectEntity.equals(projectEntity1);
 //        log.info(str2 + bbb + projectEntity.hashCode());
 //    }

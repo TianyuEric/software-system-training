@@ -4,9 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.projectpractice.ProjectPracticeApplication;
 import com.projectpractice.common.HttpResponseEntity;
 import com.projectpractice.common.UserMessage;
-import com.projectpractice.entity.UserEntity;
+import com.projectpractice.entity.User;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -46,14 +45,14 @@ class ProjectPracticeApplicationTests {
     }
     @Test
     void testUserLogin() {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setUsername("admin");
-        userEntity.setPassword("123456");
-        String body = JSON.toJSONString(userEntity);
-        UserEntity userEntity2 = new UserEntity();
-        userEntity2.setUsername("admin");
-        userEntity2.setPassword("123");
-        String body2 = JSON.toJSONString(userEntity2);
+        User user = new User();
+        user.setUsername("admin");
+        user.setPassword("123456");
+        String body = JSON.toJSONString(user);
+        User user2 = new User();
+        user2.setUsername("admin");
+        user2.setPassword("123");
+        String body2 = JSON.toJSONString(user2);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/admin/userLogin")
@@ -83,10 +82,10 @@ class ProjectPracticeApplicationTests {
 
     @Test
     void testAddUser(){
-        UserEntity userEntity = new UserEntity();
-        userEntity.setUsername("hhhh");
-        userEntity.setPassword("6666");
-        String body = JSON.toJSONString(userEntity);
+        User user = new User();
+        user.setUsername("hhhh");
+        user.setPassword("6666");
+        String body = JSON.toJSONString(user);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/admin/addUserInfo")
@@ -104,11 +103,11 @@ class ProjectPracticeApplicationTests {
 
     @Test
     void testModifyUser(){
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId("1");
-        userEntity.setUsername("hhhh");
-        userEntity.setPassword("6666");
-        String body = JSON.toJSONString(userEntity);
+        User user = new User();
+        user.setId("1");
+        user.setUsername("hhhh");
+        user.setPassword("6666");
+        String body = JSON.toJSONString(user);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/admin/modifyUserInfo")
@@ -126,11 +125,11 @@ class ProjectPracticeApplicationTests {
 
     @Test
     void testDeleteUser(){
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId("1");
-        userEntity.setUsername("hhhh");
-        userEntity.setPassword("6666");
-        String body = JSON.toJSONString(userEntity);
+        User user = new User();
+        user.setId("1");
+        user.setUsername("hhhh");
+        user.setPassword("6666");
+        String body = JSON.toJSONString(user);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/admin/deleteUserinfo")

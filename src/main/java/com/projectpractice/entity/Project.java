@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @TableName("project_info")
-public class ProjectEntity {
+public class Project {
     @TableId
     private String id;
     private String userId;

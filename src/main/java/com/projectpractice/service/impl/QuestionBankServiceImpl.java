@@ -1,12 +1,12 @@
 package com.projectpractice.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.projectpractice.entity.QuestionBankEntity;
+import com.projectpractice.entity.QuestionBank;
 import com.projectpractice.mapper.QuestionBankMapper;
 import com.projectpractice.service.QuestionBankService;
 import org.springframework.stereotype.Service;
 
 
 @Service
-public class QuestionBankServiceImpl extends ServiceImpl<QuestionBankMapper, QuestionBankEntity> implements QuestionBankService {
+public class QuestionBankServiceImpl extends ServiceImpl<QuestionBankMapper, QuestionBank> implements QuestionBankService {
 }

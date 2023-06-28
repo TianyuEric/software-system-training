@@ -7,15 +7,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-@TableName("question_bank")
-public class QuestionBankEntity {
+@AllArgsConstructor
+@TableName("answer_info")
+public class Answer {
     @TableId
     private String id;
-    private String name;
-    private String type;
+    private String questionnaireId;
+    private String roleId;
+    private LocalDateTime answerTime;
 }

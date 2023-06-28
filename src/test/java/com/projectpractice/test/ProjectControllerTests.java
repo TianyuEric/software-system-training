@@ -2,12 +2,9 @@ package com.projectpractice.test;
 
 import com.alibaba.fastjson.JSON;
 import com.projectpractice.ProjectPracticeApplication;
-import com.projectpractice.dto.ChosenAnswerDto;
-import com.projectpractice.entity.AnswerEntity;
-import com.projectpractice.entity.ProjectEntity;
+import com.projectpractice.entity.Project;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +20,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -170,10 +162,10 @@ public class ProjectControllerTests {
 //    }
     @Test
     void testQueryProjectList(){
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setId("1668226706322665474");
+        Project project = new Project();
+        project.setId("1668226706322665474");
 
-        String body = JSON.toJSONString(projectEntity);
+        String body = JSON.toJSONString(project);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/project/queryProjectList")
@@ -191,11 +183,11 @@ public class ProjectControllerTests {
 
     @Test
     void testQueryProjectListWithEmpty1(){
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setId(null);
-        projectEntity.setProjectName(null);
+        Project project = new Project();
+        project.setId(null);
+        project.setProjectName(null);
 
-        String body = JSON.toJSONString(projectEntity);
+        String body = JSON.toJSONString(project);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/project/queryProjectList")
@@ -213,11 +205,11 @@ public class ProjectControllerTests {
 
     @Test
     void testQueryProjectListWithEmpty2(){
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setId("1668226706322665474");
-        projectEntity.setProjectName(null);
+        Project project = new Project();
+        project.setId("1668226706322665474");
+        project.setProjectName(null);
 
-        String body = JSON.toJSONString(projectEntity);
+        String body = JSON.toJSONString(project);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/project/queryProjectList")
@@ -235,10 +227,10 @@ public class ProjectControllerTests {
 
     @Test
     void testAddProjectInfo(){
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setId("1668226706322665474");
+        Project project = new Project();
+        project.setId("1668226706322665474");
 
-        String body = JSON.toJSONString(projectEntity);
+        String body = JSON.toJSONString(project);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/project/addProjectInfo")
@@ -256,10 +248,10 @@ public class ProjectControllerTests {
 
     @Test
     void testAddProjectInfoWithEmpty(){
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setId("1668226706322667474");
+        Project project = new Project();
+        project.setId("1668226706322667474");
 
-        String body = JSON.toJSONString(projectEntity);
+        String body = JSON.toJSONString(project);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/project/addProjectInfo")
@@ -277,10 +269,10 @@ public class ProjectControllerTests {
 
     @Test
     void testModifyProjectInfo(){
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setId("1668226706322665474");
+        Project project = new Project();
+        project.setId("1668226706322665474");
 
-        String body = JSON.toJSONString(projectEntity);
+        String body = JSON.toJSONString(project);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/project/modifyProjectInfo")
@@ -298,10 +290,10 @@ public class ProjectControllerTests {
 
     @Test
     void testModifyProjectInfoWithEmpty(){
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setId("1668226706322667474");
+        Project project = new Project();
+        project.setId("1668226706322667474");
 
-        String body = JSON.toJSONString(projectEntity);
+        String body = JSON.toJSONString(project);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/project/modifyProjectInfo")
@@ -319,10 +311,10 @@ public class ProjectControllerTests {
 
     @Test
     void testDeleteProject(){
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setId("1668226706322665474");
+        Project project = new Project();
+        project.setId("1668226706322665474");
 
-        String body = JSON.toJSONString(projectEntity);
+        String body = JSON.toJSONString(project);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/project/deleteProjectById")
@@ -340,10 +332,10 @@ public class ProjectControllerTests {
 
     @Test
     void testDeleteProjectWithEmpty(){
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setId("1668226706322667474");
+        Project project = new Project();
+        project.setId("1668226706322667474");
 
-        String body = JSON.toJSONString(projectEntity);
+        String body = JSON.toJSONString(project);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/project/deleteProjectById")

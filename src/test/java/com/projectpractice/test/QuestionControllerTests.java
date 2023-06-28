@@ -3,11 +3,10 @@ package com.projectpractice.test;
 import com.alibaba.fastjson.JSON;
 import com.projectpractice.ProjectPracticeApplication;
 import com.projectpractice.dto.QuestionDto;
-import com.projectpractice.entity.OptionEntity;
-import com.projectpractice.entity.ProjectEntity;
+import com.projectpractice.entity.Option;
+import com.projectpractice.entity.Project;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,10 +53,10 @@ public class QuestionControllerTests {
         questionDto.setId("1671556305706160129");
         questionDto.setName("aaa");
         questionDto.setIsMust("1");
-        List<OptionEntity> list = new ArrayList<OptionEntity>();
-        OptionEntity optionEntity = new OptionEntity();
-        optionEntity.setQuestionId("1671556305706160129");
-        optionEntity.setId("1672162102693777409");
+        List<Option> list = new ArrayList<Option>();
+        Option option = new Option();
+        option.setQuestionId("1671556305706160129");
+        option.setId("1672162102693777409");
 
         List<Map<String, String>> mapList = new ArrayList<>();
         Map<String,String> map = new HashMap<>();
@@ -86,10 +85,10 @@ public class QuestionControllerTests {
         questionDto.setId("1671556305706160120");
         questionDto.setName("aaa");
         questionDto.setIsMust("1");
-        List<OptionEntity> list = new ArrayList<OptionEntity>();
-        OptionEntity optionEntity = new OptionEntity();
-        optionEntity.setQuestionId("1671556305706160129");
-        optionEntity.setId("1672162102693777409");
+        List<Option> list = new ArrayList<Option>();
+        Option option = new Option();
+        option.setQuestionId("1671556305706160129");
+        option.setId("1672162102693777409");
 
         List<Map<String, String>> mapList = new ArrayList<>();
         Map<String,String> map = new HashMap<>();
@@ -114,10 +113,10 @@ public class QuestionControllerTests {
 
     @Test
     void testAdd(){
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setId("1672162078542974977");
+        Project project = new Project();
+        project.setId("1672162078542974977");
 
-        String body = JSON.toJSONString(projectEntity);
+        String body = JSON.toJSONString(project);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/question/add")
@@ -135,10 +134,10 @@ public class QuestionControllerTests {
 
     @Test
     void testAddWithEmpty(){
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setId("1672162078542974973");
+        Project project = new Project();
+        project.setId("1672162078542974973");
 
-        String body = JSON.toJSONString(projectEntity);
+        String body = JSON.toJSONString(project);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/question/add")
@@ -156,10 +155,10 @@ public class QuestionControllerTests {
 
     @Test
     void testRemove(){
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setId("1673151883548528641");
+        Project project = new Project();
+        project.setId("1673151883548528641");
 
-        String body = JSON.toJSONString(projectEntity);
+        String body = JSON.toJSONString(project);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/question/delete")
@@ -177,10 +176,10 @@ public class QuestionControllerTests {
 
     @Test
     void testRemoveWithEmpty(){
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setId("1673151883548528645");
+        Project project = new Project();
+        project.setId("1673151883548528645");
 
-        String body = JSON.toJSONString(projectEntity);
+        String body = JSON.toJSONString(project);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/question/delete")
@@ -216,10 +215,10 @@ public class QuestionControllerTests {
 
     @Test
     void testGetLinkQuestion(){
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setId("1672933494305525761");
+        Project project = new Project();
+        project.setId("1672933494305525761");
 
-        String body = JSON.toJSONString(projectEntity);
+        String body = JSON.toJSONString(project);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/question/link")
@@ -237,10 +236,10 @@ public class QuestionControllerTests {
 
     @Test
     void testGetLinkQuestionEmpty(){
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setId("1672933494305525761");
+        Project project = new Project();
+        project.setId("1672933494305525761");
 
-        String body = JSON.toJSONString(projectEntity);
+        String body = JSON.toJSONString(project);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/question/link")
@@ -258,10 +257,10 @@ public class QuestionControllerTests {
 
     @Test
     void testGetStatistic(){
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setId("1672932350699151362");
+        Project project = new Project();
+        project.setId("1672932350699151362");
 
-        String body = JSON.toJSONString(projectEntity);
+        String body = JSON.toJSONString(project);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/question/statistic")
@@ -279,10 +278,10 @@ public class QuestionControllerTests {
 
     @Test
     void testGetStatisticEmpty(){
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setId("1672932350699151362");
+        Project project = new Project();
+        project.setId("1672932350699151362");
 
-        String body = JSON.toJSONString(projectEntity);
+        String body = JSON.toJSONString(project);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/question/statistic")
@@ -300,10 +299,10 @@ public class QuestionControllerTests {
 
     @Test
     void testGetAll(){
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setId("1673510366198755329");
+        Project project = new Project();
+        project.setId("1673510366198755329");
 
-        String body = JSON.toJSONString(projectEntity);
+        String body = JSON.toJSONString(project);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/question/all")
@@ -321,10 +320,10 @@ public class QuestionControllerTests {
 
     @Test
     void testGetAllEmpty(){
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setId("1673510366198755329");
+        Project project = new Project();
+        project.setId("1673510366198755329");
 
-        String body = JSON.toJSONString(projectEntity);
+        String body = JSON.toJSONString(project);
         MvcResult mvcResult;
         try {
             mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/question/all")
