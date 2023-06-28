@@ -168,7 +168,7 @@ public class ProjectControllerTests {
         String body = JSON.toJSONString(project);
         MvcResult mvcResult;
         try {
-            mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/project/queryProjectList")
+            mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/queryProjectList")
                             .accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
                             .content(body).characterEncoding("utf-8")).andExpect(MockMvcResultMatchers.status().isOk())
                     .andDo(MockMvcResultHandlers.print())
@@ -190,7 +190,7 @@ public class ProjectControllerTests {
         String body = JSON.toJSONString(project);
         MvcResult mvcResult;
         try {
-            mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/project/queryProjectList")
+            mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/queryProjectList")
                             .accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
                             .content(body).characterEncoding("utf-8")).andExpect(MockMvcResultMatchers.status().isOk())
                     .andDo(MockMvcResultHandlers.print())
@@ -212,7 +212,7 @@ public class ProjectControllerTests {
         String body = JSON.toJSONString(project);
         MvcResult mvcResult;
         try {
-            mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/project/queryProjectList")
+            mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/queryProjectList")
                             .accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
                             .content(body).characterEncoding("utf-8")).andExpect(MockMvcResultMatchers.status().isOk())
                     .andDo(MockMvcResultHandlers.print())
