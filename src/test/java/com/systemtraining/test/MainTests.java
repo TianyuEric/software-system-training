@@ -7,15 +7,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
 
-
 @SpringBootTest
 @Slf4j
 class MainTests {
     @Test
-    void testMain(){
+    void testMain() {
         String[] args = new String[0];
         log.info(Arrays.toString(args));
+        System.setProperty("server.port", "0"); // 使用随机可用端口
         SystemTrainingApplication.main(args);
     }
-
 }

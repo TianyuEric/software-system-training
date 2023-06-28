@@ -10,8 +10,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-@AutoConfigureMockMvc
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = SystemTrainingApplication.class)
 @Slf4j
 class ProjectApplicationTests {

@@ -26,8 +26,6 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@AutoConfigureMockMvc
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = SystemTrainingApplication.class)
 @Slf4j
 
