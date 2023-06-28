@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
+//junit 有问题
 @SpringBootTest(classes = SystemTrainingApplication.class)
 @Slf4j
 public class QuestionnaireControllerTests {
